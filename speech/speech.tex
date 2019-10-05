@@ -1,0 +1,462 @@
+%author:  Wentai ZHANG(rchardx@gmail.com)
+\def\version{20100122-rev8}
+
+\input{ctex4xetex.cfg}
+\documentclass{ctexart}
+
+\usepackage[CJKtextspaces]{xeCJK}
+\input{xecjkfonts}
+
+\usepackage{amsmath,amssymb,amsthm,latexsym,mathrsfs}
+\usepackage{enumerate}
+
+\newcommand{\roma}[1]{\romannumeral #1}
+\newcommand{\Roma}[1]{\expandafter\@slowromancap\romannumeral #1@}
+
+\newcommand{\bbold}[1]{\textbf{#1}}
+
+\newcommand{\aabs}[1]{{ \left| #1 \right| }}
+\newcommand{\ffloor}[1]{{ \left\lfloor #1 \right\rfloor }}
+\newcommand{\N}{\boldsymbol{N}}
+\newcommand{\Z}{\boldsymbol{Z}}
+
+\newtheorem{thrm}{定理}[section]
+\newtheorem{prop}{性质}[section]
+\newtheorem{exmp}{例题}[section]
+\newtheorem{defn}{定义}[section]
+\newtheorem{lemm}[thrm]{引理}
+\newtheorem{coro}[thrm]{推论}
+
+\renewenvironment{proof}[1][证]{\noindent \textbf{#1.} }{\hfill$\Box$}
+
+\begin{document}
+\title{讲稿}
+\author{张文泰\\ \texttt{rchardx@gmail.com}}
+\date{\version}
+\maketitle
+
+\section{整除}
+
+\subsection{自然数、Peano公理}
+主要是最小自然数原理以及数学归纳法。
+
+\begin{exmp}
+设$n\neq 1$。证明：$(n-1)^2|n^k-1$的充要条件是$(n-1)|k$。
+\end{exmp}
+\begin{proof}
+$n^k-1=[(n-1)+1]^k-1=A(n-1)^2+k(n-1)$，这里$A$是一个整数，又$(n-1)^2|n^k-1$，所以必然有$(n-1)|k$，反过来命题同样成立。得证。
+\end{proof}
+
+\subsection{整除和素数}
+素数的检验。
+
+\begin{exmp}
+证明：形如$4m+1$的素数有无穷多个。
+\end{exmp}
+\begin{proof}
+设$p_1,p_2,\dotsc,p_r$是所有$4m+1$形式的素数，且$p_i=4m_i+1$。我们令$n=p_1p_2\dotsm p_r+1$，则$n\equiv 2\pmod{4}$。那么如果$n$的素因数全都是$4m+3$形式，那么$n\equiv 1\pmod{4}$或$n\equiv 3\pmod{4}$，绝不会$n\equiv 2\pmod{4}$，所以一定存在一个$p=4m+1 | n$，但是这个$p$没有在$p_1,p_2,\dotsc,p_r$中出现，所以矛盾。
+\end{proof}
+
+\subsection{帶余除法、辗转相除法}
+重点是辗转相除法及其扩展，并介绍相关的Euclid's Algorithm。
+
+使用Euclid辗转相除法，我们还可以求出$ax+by=d$的解。从后面的内容我们知道，这个不定方程有解的充要条件是$(a,b)|d$。我们先求出$ax+by=(a,b)$的解，然后可以得到原方程的解。具体的做法是使用迭代。我们先考虑和原始的辗转相除法相同的过程，当最后$b=0$时，$a'x=a'$的解是$x=1, y=0$。对于$ax+by=(a,b)$，下一层的运算结果是$bx'+(a\mod b)y'=(a,b)$，那么可以解得$x=y',y=x'-\ffloor{\frac{a}{b}}y'$，因为$\ffloor{\frac{a}{b}}\times b+(a\mod b)=a$。
+
+\begin{exmp}
+设$a>2$是奇数。证明
+\begin{enumerate}[(i)]
+\item 一定存在正整数$d \leq a-1$，使得$a|2^d-1$。
+\item 设$d_0$是满足上面的最小正整数$d$。那么，$a|2^h-1$的充要条件是$d_0|h$。
+\end{enumerate}
+\end{exmp}
+\begin{proof}
+先证(i)。考虑以下$a$个数：
+\begin{displaymath}
+2^0,2^1,2^2,\dotsc,2^{a-1}
+\end{displaymath}
+显然，$a \nmid 2^j(0 \leq j <a )$。由定理知，对于每一个$j$，$0 \leq j <a$，
+\begin{displaymath}
+2^j=q_j a+r_j, \quad 0<r_j<a
+\end{displaymath}
+所以$a$个余数$r_0,r_1,\dotsc,r_{a-1}$仅可能取$a-1$个值。因此其中必有两个相等，设为$r_i,r_k$，不妨设$0\leq i<k<a$。因而有
+\begin{displaymath}
+a(q_k-q_i)=2^k-2^i=2^i(2^{k-i}-1)
+\end{displaymath}
+所以，$a|2^{k-i}-1$，则$d=k-i\leq a-1$，(i)得证。
+
+下面证(ii)。易证充分性，所以只要证必然性。
+\begin{displaymath}
+h=qd_0+r, \quad 0\leq r<d_0
+\end{displaymath}
+因而有
+\begin{displaymath}
+2^h-1=2^{qd_0+r}-2^r+2^r-1=2^r(2^{qd_0}-1)+(2^r-1)
+\end{displaymath}
+易得$a|2^r-1$，由此及$d_0$的最小性得$r=0$，即$d_0|h$。
+\end{proof}
+
+\begin{exmp}
+给定$a, d, n, m$，求$\sum_{i=0}^{n-1}\ffloor{\frac{a+di}{m}}$。
+\end{exmp}
+
+
+\subsection{最大公约数}
+几个证明和性质。整系数线性组合。
+
+第一个途径：
+\begin{thrm}
+$a_j|c(1\leq j\leq k)$的充要条件是$[a_1,\dotsc,a_k]|c$。
+\end{thrm}
+\begin{proof}
+充分性显然。设$L=[a_1,\dotsc,a_k]$。得
+\begin{displaymath}
+c=qL+r,\quad 0\leq r<L
+\end{displaymath}
+由此及$a_j|c$推出$a_j|r$，所以$r$是公倍数。进而，又由$0\leq r<L$得$r=0$，所以$L|c$。
+\end{proof}
+
+\begin{exmp}
+设$p$是素数。证明：若$(a,p)=1$，则$p|a^{p-1}-1$。
+\end{exmp}
+\begin{proof}
+首先要说明组合数的一个性质
+\begin{displaymath}
+\binom{p}{j}=\frac{p!}{j!(p-j)!}
+\end{displaymath}
+是整数，即$j!(p-j)!|p!$。由于$p$是素数，所以，对任意$1\leq i\leq p-1$有$(p,i)=1$。因此
+\begin{displaymath}
+(p,j!(p-j)!)=1,\quad 1\leq j\leq p-1
+\end{displaymath}
+进而推出，当$1\leq j\leq p-1$时$j!(p-j)!|(p-1)!$，也就是$p|\binom{p}{j}$。
+
+我们先证$p|a^p-a$。用归纳法。当$a=1$时显然成立，若$a=n$时成立，$(n+1)^p-(n+1)=n^p-n+pA$，这里$A$是一个整数。显然，$a=n+1$时也成立，所以$p|a^p-a$。再由$(a,p)=1$，命题得证。
+\end{proof}
+
+第二个途径：
+\begin{thrm}
+设$a_1,\dotsc,a_k$是不全为零的整数。我们有
+\begin{enumerate}[(i)]
+\item $(a_1,\dotsc,a_k)=\min\{s=a_1x_1+\dotsb+a_k x_k : x_j\in \Z(1\leq j\leq k),s>0\}$，即$a_1,\dotsc,a_k$的最大公约数等于$a_1,\dotsc,a_k$的所有整系数线性组合组成的集合$S$中最小的整数。
+\item 一定存在一组整数$x_{1,0},\dotsc,x_{k,0}$使得
+\begin{equation}
+(a_1,\dotsc,a_k)=a_1 x_{1,0}+\dotsb+a_k x_{k,0}
+\end{equation}
+\end{enumerate}
+\end{thrm}
+\begin{proof}
+由于$0<a_1^2 +\dotsb+a_k^2\in S$，所以集合$S$中有正整数。由最小自然数原理得$S$中必有最小数$s_0$。显然，对于任一公约数$d|a_j(1\leq j\leq k)$，则必有$d$整除$S$任一元素，那么$d|s_0$。所以，$\aabs{d}\leq s_0$。另外
+\begin{displaymath}
+a_j=q_j s_0+r_j,\quad 0\leq r_j<s_0
+\end{displaymath}
+因为$s_0$可以被$x_1,\dotsc,x_k$表示，$a_j$也可以，而$r_j=a_j-q_j s_0$，所以$r_j\in S$。如果$r_j>0$，则与$s_0$最小矛盾，所以$r_j=0$。即$s_0$是最大公约数。
+\end{proof}
+
+\begin{exmp}
+设$m, n$是正整数。证明$(2^m-1,2^n-1)=2^{(m,n)}-1$。
+\end{exmp}
+\begin{proof}
+不妨设$m \geq n$。由带余除法得$m=qn+r, 0 \leq r < n$。我们有
+\begin{displaymath}
+2^m-1=2^{qn+r}-2^r+2^r-1=2^r(2^{qn}-1)+2^r-1
+\end{displaymath}
+由此及$2^n-1|2^{qn}-1$得
+\begin{displaymath}
+(2^m-1,2^n-1)=(2^n-1,2^r-1)
+\end{displaymath}
+注意到$(m,n)=(n,r)$，若$r=0$，则$(m,n)=n$，结论成立。若$r>0$，则继续对$(2^n-1,2^r-1)$做同样的处理，由辗转相除法可以知道结论成立。
+
+值得注意的是，这里的2用任何一个大于1的自然数替代都是成立的。
+
+（联想：$(F_m,F_n)=F_{(m,n)}$。）
+\end{proof}
+
+\begin{exmp}
+设$p$是奇素数，$q$是$2^p-1$的素因数。证明$q=2kp+1$。
+\end{exmp}
+\begin{proof}
+首先有$q|2^{q-1}-1$。再得$q|2^{(p,q-1)}-1$，所以$p|q-1$，再由$p$为奇素数得$q=2kp+1$。
+\end{proof}
+
+\begin{exmp}
+$13|a^2-7b^2$的充要条件是$13|a, 13|b$。
+\end{exmp}
+\begin{proof}
+充分性显然，证必要性。若$13\nmid a$，那么$13\nmid b$，则一定有$x, y$使得$13x+by=1$。由此及$13|y^2(a^2-7b^2)=(ay)^2-7(by)^2$，（$(by)^2=(13x)^2+1-26x$）得到$13|(ay)^2-7$。这个式子不可能被13整除，矛盾。所以$13|a, 13|b$。
+\end{proof}
+
+
+\subsection{算术基本定理}
+重点在于分解式。
+
+\begin{exmp}
+给你一个正整数$n(n \leq 9\times 10^{14})$，求有多少种方式使得$n$能表示为若干个连续正整数的和。
+\end{exmp}
+
+\begin{exmp}
+练习题Factor（练习题之后讨论）。
+\end{exmp}
+
+
+\section{同余}
+
+\subsection{同余、同余类、剩余系}
+简单地给出Euler函数$\varphi(p^k)$的公式。
+
+\begin{exmp}
+给定$k, n$，求$\sum_{i=1}^n(k \mod i)$。
+\end{exmp}
+\begin{proof}
+对于当前的$i$，令$p=k \mod i, q=\ffloor{\frac{k}{i}}$；如果$\ffloor{\frac{k}{i+1}}$的值不变，$k \mod (i+1)$的值必然比当前的余数小$q$，所以可以把$p$一直减$q$直到小于$0$为止（减$\ffloor{\frac{p}{q}}$次），将所得的和加入结果中。同时$i$增加$\ffloor{\frac{p}{q}}$。
+\end{proof}
+
+\begin{exmp}
+当正整数$m$满足什么条件时$1^3+2^3+\dotsb+(m-1)^3+m^3\equiv 0\pmod{m}$一定成立。
+\end{exmp}
+\begin{proof}
+因为$k^3+(m-k)^3\equiv 0\pmod{m}$，所以$1^3+2^3+\dotsb+(m-1)^3+m^3\equiv 0\equiv m^3+(1^3+(m-1)^3)+\dotsb \pmod{m}$。
+
+当$2\nmid m$，此式成立；当$2|m$时，若$4|m$，仍然成立。综上当$2\nmid m$或$4|m$成立；当$2|m$且$4\nmid m$时不成立。
+\end{proof}
+
+\subsection{Euler函数与Fermat-Euler定理}
+定理的证明：既约剩余系乘积相同。
+
+\begin{exmp}
+给出$n, m$，求$x_1,\dotsc,x_n$的数量，这里$0< x_i \leq m$，且$(x_1,\dotsc,x_n,m)=1$。
+\end{exmp}
+\begin{proof}
+我们考察扩展的欧拉函数$\varphi(m,n)$。讨论。
+\end{proof}
+
+\begin{exmp}
+练习题Sum（练习题之后讨论）。
+\end{exmp}
+
+\subsection{Wilson定理}
+\begin{thrm}[Wilson]
+设$p$是素数，$r_1,\dotsc,r_{p-1}$是模$p$的既约剩余系，我们有
+\begin{displaymath}
+r_1\dotsm r_{p-1}\equiv -1\pmod{p}
+\end{displaymath}
+特别的
+\begin{displaymath}
+(p-1)!\equiv -1\pmod{p}
+\end{displaymath}
+\end{thrm}
+\begin{proof}
+当$p=2$时，结论成立。所以设$p\geq 3$。
+
+对这一组给定的既约剩余系中每一个$r_i$，必然存在一个唯一的$r_j$使得
+\begin{equation}\label{EQU:wilson_proof}
+r_i r_j\equiv 1\pmod{p}
+\end{equation}
+使$r_i=r_j$的充要条件是
+\begin{displaymath}
+r_i^2\equiv 1\pmod{p}
+\end{displaymath}
+即
+\begin{displaymath}
+(r_i-1)(r_i+1)\equiv 0\pmod{p}
+\end{displaymath}
+由于$p$是素数且$p\geq 3$，所以上式成立当且仅当
+\begin{displaymath}
+r_i-1\equiv 0\pmod{p}
+\end{displaymath}
+或
+\begin{displaymath}
+r_i+1\equiv 0\pmod{p}
+\end{displaymath}
+由于$p\geq 3$，所以这两个条件不能同时成立。因此，在既约剩余系中，除了
+\begin{displaymath}
+r_i\equiv 1,-1\pmod{p}
+\end{displaymath}
+这两个数以外，对其它的$r_i$必有$r_j\neq r_i$使得式\ref{EQU:wilson_proof}成立。不妨设$r_1\equiv 1\pmod{p}$，$r_{p-1}\equiv -1\pmod{p}$。这样，在这组剩余系中除去满足上式的两个数以外，其它的数恰好可以按照式\ref{EQU:wilson_proof}两两分完，即满足
+\begin{displaymath}
+r_2\dotsm r_{p-2}\equiv 1\pmod{p}
+\end{displaymath}
+所以定理得证。
+\end{proof}
+
+\begin{exmp}
+设$p$是奇素数，证明
+\begin{displaymath}
+1^2\cdot 3^2\dotsm (p-2)^2\equiv (-1)^{(p+1)/2}\pmod{p}
+\end{displaymath}
+\end{exmp}
+\begin{proof}
+注意到当$p$是奇素数时
+\begin{displaymath}
+\begin{split}
+(p-1)!&=(1\cdot(p-1))(3\cdot(p-3))\dotsm((p-2)(p-(p-2)))\\
+      &\equiv(-1)^{(p-1)/2}\cdot 1^2 \cdot 3^2\dotsm (p-2)^2\pmod{p}
+\end{split}
+\end{displaymath}
+由此可以得证。
+\end{proof}
+
+\begin{exmp}
+设素数$p>5$。证明$(p-1)!+1$不可能是素数的方幂。
+\end{exmp}
+\begin{proof}
+显然，$p|(p-1)!+1$，那么如果$(p-1)!+1$为某个素数的方幂，那么这个素数一定是$p$。注意到$p-1|(p-2)!$，我们设$(p-1)!+1=p^k$，得到$p-1|k$（数学归纳法）。然后可以导出矛盾。
+
+数学归纳法：$p^n-1=(p-1+1)^n-1=A(p-1)^2+n(p-1)$。
+
+矛盾：$(p-1)!+1=p^k \leq p^(p-1)$，而左边明显小于右边。
+\end{proof}
+
+\begin{exmp}
+练习题Color（练习题做完后讨论）。
+\end{exmp}
+
+\section{同余方程}
+注意多项式同余的最高“有效”次数。
+
+\subsection{一次同余方程}
+
+\subsection{一次同余方程组、孙子定理}
+
+\begin{exmp}
+设$k$是给定的正整数。证明：一定存在$k$个相邻整数，其中任何一个数都能被大于$1$的立方数整除。
+\end{exmp}
+\begin{proof}
+设$p_1,\dotsc,p_k$，考虑$x\equiv -j+1\pmod{p_j^3}, j=1,\dotsc,k$。若$x_0$是一个解，那么$x_0,x_0+1,\dotsc,x_0+k-1$就是答案。
+\end{proof}
+
+\subsection{模为素数的二次同余方程}
+
+\begin{thrm}[Euler判别法]
+设素数$p>2$，$p\nmid d$。那么，$d$是模$p$的二次剩余的充要条件是
+\begin{equation}\label{EQU:euler_judge}
+d^{(p-1)/2}\equiv 1\pmod{p}
+\end{equation}
+$d$是模$p$的二次非剩余的充要条件是
+\begin{equation}
+d^{(p-1)/2}\equiv -1\pmod{p}
+\end{equation}
+\end{thrm}
+\begin{proof}
+我们先证明上述两个式子有且仅有一个成立。我们有
+\begin{displaymath}
+d^{p-1}\equiv 1\pmod{p}
+\end{displaymath}
+所以
+\begin{displaymath}
+(d^{(p-1)/2}-1)(d^{(p-1)/2}+1)\equiv 0\pmod{p}
+\end{displaymath}
+由于素数$p>2$以及
+\begin{displaymath}
+(d^{(p-1)/2}-1,d^{(p-1)/2}+1)|2
+\end{displaymath}
+所以，上面两个判别式有且仅有一个成立。
+
+下面证式\ref{EQU:euler_judge}成立是$d$为$p$的二次剩余的充要条件。先证必要性。若$d$是$p$的二次剩余，则必有$x_0$使得
+\begin{displaymath}
+x_0^2\equiv d\pmod{p}
+\end{displaymath}
+因而
+\begin{displaymath}
+x_0^{p-1}\equiv d^{(p-1)/2}\pmod{p}
+\end{displaymath}
+由于$p\nmid d$，所以$p|x_0$，因而
+\begin{displaymath}
+x_0^{p-1}\equiv 1\pmod{p}
+\end{displaymath}
+必要性得证。
+
+再证充分性。证明方法和我们证明Wilson定理的方法一样。设式\ref{EQU:euler_judge}成立，此时必然有$p\nmid d$。考虑
+\begin{displaymath}
+ax\equiv d\pmod{p}
+\end{displaymath}
+对于$1\leq i<j\leq (p-1)/2$，我们有
+\begin{displaymath}
+i^2\not\equiv j^2\pmod{p}
+\end{displaymath}
+所以，$p$的既约剩余系中两两可以搭配成上式的解，所以
+\begin{displaymath}
+(p-1)!\equiv d^{(p-1)/2}\equiv -1\pmod{p}
+\end{displaymath}
+矛盾，充分性得证。
+\end{proof}
+
+\begin{exmp}
+对于给定的$n$，
+\begin{itemize}
+\item 求出$x^2\equiv 1\pmod{n}$的解数；
+\item 求出所有$x$满足$x^2\equiv 1\pmod{n}$。
+\end{itemize}
+\end{exmp}
+\begin{proof}
+我们先假定$n$的不同素因数个数是$r$。考察$x^2\equiv 1\pmod{p^k}$，我们发现由于$(x-1)(x+1)\equiv 1\pmod{p^k}$，所以当$p>2$时只能完全分配到一边，就是两个解。当$p=2$时，由于$(x-1)$和$(x+1)$只相差$2$，只能同时被$2$整除。我们令符号$[p]$表示命题$p$成立时值为$1$，否则为$0$。那么$p=2$时的解数就是$2^{[8|p^k]+[4|p^k]-[2|p^k]}$。我们考虑到各个不同的同余方程是独立的，不同的素因数之间可以分开计算，所以总的解数是$2^{r+[8|n]+[4|n]-[2|n]}$。
+\end{proof}
+
+\subsection{Legendre符号、Gauss二次互反律}
+
+\section{不定方程}
+
+\subsection{Pythagoras方程}
+
+\begin{exmp}
+不定方程
+\begin{displaymath}
+x^4+y^4=z^2
+\end{displaymath}
+无$xyz\neq 0$的解。
+\end{exmp}
+\begin{proof}
+该命题即要证无正整数解。假若有正整数解，那么在全体正整数解中，必有一组解$x_0,y_0,z_0$，使得$z_0$取最小值。
+\begin{enumerate}[(i)]
+\item 必有$(x_0,y_0)=1$。若不然，有素数$p|x_0,p|y_0$，则推出$p^2|z_0$，与$z_0$的最小性矛盾。由$x_0^2,y_0^2,z_0$为方程$x^2+y^2=z^2$的本原解得，$x_0,y_0$必为一奇一偶，不妨设$2|y_0$，以及$(z_0,y_0)=1$。
+\item $g_1=(z_0-y_0^2,z_0+y_0^2)=1$。因为$g_1|(2z_0,2y_0^2)=2(z_0,y_0^2)=2$，由此及$2\nmid z_0-y_0^2$即得$g_1=1$。由此及
+\begin{displaymath}
+(z_0-y_0^2)(z_0+y_0^2)=x_0^4
+\end{displaymath}
+我们令
+\begin{displaymath}
+z_0-y_0^2=u^4,\quad z_0+y_0^2=v^4
+\end{displaymath}
+这里$v>u>0,(u,v)=1,2\nmid uv$。进而有
+\begin{equation}
+y_0^2=(v^2-u^2)\frac{v^2+u^2}{2}
+\end{equation}
+\item $g_2=(v^2-u^2,(v^2+u^2)/2)=1$。因为
+\begin{displaymath}
+g_2|(v^2-u^2,v^2+u^2)|(2v^2,2u^2)=2(v^2,u^2)=2
+\end{displaymath}
+由$2\nmid uv$得到$2\nmid (v^2+u^2)/2$，因此$g_2=1$。我们再令
+\begin{displaymath}
+v^2-u^2=a^2,\quad (v^2+u^2)/2=b^2
+\end{displaymath}
+这里$a>0,b>0,(a,b)=1$，及$2|a,2\nmid b$。
+\item 由$u,v$满足的条件及$a,b$得
+\begin{displaymath}
+0<b<v<z_0
+\end{displaymath}
+及$u,a,v$是方程$x^2+y^2=z^2$的本原解且$2|a$。因此得到
+\begin{displaymath}
+u=r^2-s^2,\quad a=2rs,\quad v=r^2+s^2
+\end{displaymath}
+所以
+\begin{displaymath}
+r^4+s^4=b^2
+\end{displaymath}
+而$b<z_0$，与$z_0$的最小性矛盾，命题得证。
+\end{enumerate}
+\end{proof}
+
+\subsection{Lagrange定理}
+
+每个正整数一定可以表示为四个平方数之和，即对任意的$n\geq 1$，不定方程
+\begin{displaymath}
+x_1^2+x_2^2+x_3^2+x_4^2=n
+\end{displaymath}
+有解。
+
+如果需要证明这个定理，下面的恒等式是必须引进的：
+\begin{eqnarray*}
+&&(a_1^2+a_2^2+a_3^2+a_4^2)(b_1^2+b_2^2+b_3^2+b_4^2)\\
+&&=(a_1b_1+a_2b_2+a_3b_3+a_4b_4)^2+(a_1b_2-a_2b_1+a_3b_4-a_4b_3)^2\\
+&&+(a_1b_3-a_3b_1+a_4b_2-a_2b_4)^2+(a_1b_4-a_4b_1+a_2b_3-a_3b_2)^2
+\end{eqnarray*}
+
+\end{document}

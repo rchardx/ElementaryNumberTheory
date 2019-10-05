@@ -1,0 +1,1748 @@
+%author:  Wentai ZHANG(rchardx@gmail.com)
+\def\version{20100122-rev24}
+
+\input{ctex4xetex.cfg}
+\documentclass{ctexrep}
+
+\usepackage[CJKtextspaces]{xeCJK}
+\input{xecjkfonts}
+
+\usepackage[CJKbookmarks,colorlinks=true,pdfstartview=FitH]{hyperref}
+\usepackage{amsmath,amssymb,amsthm,latexsym,mathrsfs}
+\usepackage{enumerate}
+
+\newcommand{\roma}[1]{\romannumeral #1}
+\newcommand{\Roma}[1]{\expandafter\@slowromancap\romannumeral #1@}
+
+\newcommand{\bbold}[1]{\textbf{#1}}
+
+\newcommand{\aabs}[1]{{ \left| #1 \right| }}
+\newcommand{\ffloor}[1]{{ \left\lfloor #1 \right\rfloor }}
+\newcommand{\N}{\boldsymbol{N}}
+\newcommand{\Z}{\boldsymbol{Z}}
+
+\newtheorem{thrm}{定理}[section]
+\newtheorem{prop}{性质}[section]
+\newtheorem{exmp}{例题}[section]
+\newtheorem{defn}{定义}[section]
+\newtheorem{lemm}[thrm]{引理}
+\newtheorem{coro}[thrm]{推论}
+
+\renewenvironment{proof}[1][证]{\noindent \textbf{#1.} }{\hfill$\Box$}
+
+\begin{document}
+\title{初等数论}
+\author{张文泰\\ \texttt{rchardx@gmail.com}}
+\date{\version}
+\maketitle
+
+\tableofcontents
+
+\chapter{整除}
+整除理论是数论的基础，它主要是对整数除法运算的内容作抽象的、系统的总结。本章的主要内容是算术基本定理，同时有对其他基础理论的讨论。
+
+\section{Peano公理}
+本节将会介绍自然数\footnote{一般情况下，$0$不参与数论问题的讨论，所以在以后的讨论中，把正整数和自然数看成等价的概念。}最重要的两个性质，自然数的归纳原理和最小自然数原理。
+
+自然数的本质属性是由归纳属性刻画的，它是自然数公理化定义的核心。自然数集合严格的抽象的定义是由Peano公理给出的，它刻画了自然数的本质属性，并导出有关的运算和性质。
+
+\paragraph{Peano公理}
+设$\N$是一个非空集合，满足以下条件：
+\begin{enumerate}[(i)]
+\item 对每一个元素$n \in \N$，一定有唯一的一个$\N$中的元素与之对应，这个元素记作$n^{+}$，称为$n$的\bbold{后继元素}。
+\item 有元素$e \in \N$，它不是任一元素的后继。
+\item $\N$中的元素至多是一个元素的后继。
+\item （\bbold{归纳公（原）理}）设$S$是$\N$的一个子集合，$e \in S$。如果$n \in S$，则必有$n^{+}  \in S$，那么，$S = \N$。
+\end{enumerate}
+
+由此立刻可以得出几个定理：
+\begin{thrm}
+对任意的$n \in \N$有$n \neq n^+$。
+\end{thrm}
+
+\begin{thrm}
+设$m \in \N$，$m \neq e$，那么，必有唯一的$n \in \N$使得$n^+=m$，即$\N$中每个不等于$e$的元素必是某个元素的后继，$e$是唯一一个不是任何元素后继的元素。
+\end{thrm}
+
+\begin{thrm}[归纳证明原理]
+设$P(n)$是关于自然数$n$的一种性质或者命题。如果当$n=e$时，$P(e)$成立，以及有$P(n)$成立必可推出$P(n^+)$成立，那么，$P(n)$对所有的$n \in \N$都成立。
+\end{thrm}
+
+归纳证明原理作为一种相当基础的证明算法，在解决一些关于集合的命题的时候往往会被使用。在验证某些恒等式的时候，由于等式的变量取值为正整数，也可以巧妙地使用归纳证明原理来证明。
+
+\paragraph{顺序}
+对给定的$a,b \in \N$，如果存在$x \in \N$，使得$b=a+x$，那么，我们就说$b$在$a$之后（或$a$在$b$之前），也说$b$\bbold{大于}$a$（或者$a$\bbold{小于}$b$），记作
+\begin{displaymath}
+b > a \qquad or \qquad a<b
+\end{displaymath}
+
+由此推出
+\begin{thrm}
+对任意的$a,b \in \N$，$a=b,\quad a>b,\quad a<b$有且仅有一个成立。
+\end{thrm}
+
+\begin{thrm}[最小自然数原理]
+自然数集合$\N$的任一子集$T$中都存在一个最小的元素。
+\end{thrm}
+
+\begin{thrm}[最大自然数原理]
+对于自然数集合$\N$的一个子集$M$，如果$M$存在上界，那么$M$中必定存在一个最大的元素。
+\end{thrm}
+
+最小自然数原理是常用的第二种数学归纳法的基础。
+\begin{thrm}[第二种数学归纳法]
+设$P(n)$是关于自然数$n$的一种性质或者命题。如果
+\begin{enumerate}[(i)]
+\item 当$n=1$时，$P(1)$成立；
+\item 设$n>1$，若对所有的自然数$m<n$，$P(m)$成立，则必有$P(n)$成立。
+\end{enumerate}
+那么，$P(n)$对所有自然数$n$成立。
+\end{thrm}
+
+这一章完全是各种基础的概念，作为一个背景简单说明一下。下面开始介绍比较重要而又很基础的一些内容。
+
+\section{整除与素数}
+这一节简单介绍了整除的概念，然后引出了素数的相关内容。
+
+\begin{defn}
+设$a,b \in \Z$，$a \neq 0$。如果存在$q \in \Z$使得$b=aq$，那么就说$b$可被$a$\bbold{整除}，记作$a|b$，且称$b$是$a$的\bbold{倍数}，$a$是$b$的\bbold{约数}。
+$b$不能被$a$整除就记作$a \nmid b$。
+\end{defn}
+
+\begin{thrm}
+\begin{enumerate}[(i)]
+\item $a|b \iff -a|b \iff a|-b \iff \aabs{a}|\aabs{b}$；
+\item $a|b$且$b|c \Rightarrow a|c$；
+\item $a|b$且$a|c \iff $对任意的$x,y \in \Z$有$a|bx+cy$。该定理还有其一般形式；
+\item 设$m \neq 0$。那么，$a|b \iff ma|mb$；
+\item $a|b$且$b|a \Rightarrow b = \pm a$；
+\item 设$b \neq 0$。那么，$a|b \Rightarrow \aabs{a}\leq\aabs{b}$。
+\end{enumerate}
+\end{thrm}
+
+\begin{exmp}
+设$a,b$是两个给定的非零整数，且有整数$x,y$，使得$ax+by=1$。证明：若$a|n$且$b|n$，则$ab|n$。
+\end{exmp}
+\begin{proof}
+由$n=n(ax+by)=(na)x+(nb)y$，及$ab|na$，$ab|nb$即得所要的结论\footnote{事实上，满足题中的所给条件的$a,b$是互素的。}。
+\end{proof}
+
+\begin{defn}
+设整数$p \neq 0, \pm 1$。如果它除了显然约数$\pm 1, \pm p$外没有其他的约束，那么$p$被称为是\bbold{不可约数}，也叫做\bbold{素数\footnote{以后我们提到素数的时候，若无特殊情况，都假定它是正的。}}。
+若$a \neq 0,\pm 1$且$a$不是不可约数，则$a$称为\bbold{合数}。
+\end{defn}
+
+下面几个定理是容易得到的
+\begin{thrm}
+若$a$是合数，则必有一个素数$p$满足$p|a$。
+\end{thrm}
+
+\begin{thrm}\label{THRM:prime}
+若整数$a \geq 2$，则$a$必可以表示为若干个素数的乘积，即
+\begin{displaymath}
+a=p_1 p_2 p_3 \dotsm p_s
+\end{displaymath}
+\end{thrm}
+
+由定理\ref{THRM:prime}可以得到下面的推论
+\begin{coro}\label{coro:erato}
+设整数$a\geq 2$。
+\begin{enumerate}
+\item 若$a$是合数，则必有素数$p$，$p \leq a^{1/2}$；
+\item 若$a$有定理\ref{THRM:prime}中的表达式，则必有不可约数$p$，$p \leq a^{1/s}$。
+\end{enumerate}
+\end{coro}
+
+推论\ref{coro:erato}给出了一种在某一范围内寻找素数的有效方法。我们一般称之为\bbold{Eratosthenes筛法}。由于比较容易推出，所以不再赘述。
+
+\begin{thrm}
+素数有无穷多个。
+\end{thrm}
+\begin{proof}
+假设只有有限个素数，令它们为$p_1,p_2,\dotsc,p_k$。考虑$E_k=p_1 p_2 \dotsm p_k +1$，
+可以发现，$E_k>2$且必有某个$p_i | E_k$，所以$p_i | E_k - p_1 p_2 \dotsm p_k$，而
+$E_k - p_1 p_2 \dotsm p_k=1$，但$p_i \geq 2$，显然不可能，矛盾，所以假设错误。
+\end{proof}
+
+我们可以类似地定义欧拉数$e_n=e_1e_2\dotsm e_{n-1}+1$。下面是前几项的结果：
+\begin{displaymath}
+e_1=2, e_2=3, e_3=7, e_4=43, e_5=1807, e_6=3263443,\dotsc
+\end{displaymath}
+
+对于欧拉数，还没有关于其中是否存在无限多素数或合数的结论。一个关于它们的显然性质是对于正整数$m\neq n$，$(e_m,e_n)=1$。另外，对于$e_n(n>1)$，我们可以写出表达式
+\begin{displaymath}
+e_n=e_1e_2e_3\dotsm e_{n-1}+1=(e_{n-1}-1)e_{n-1}+1=e_{n-1}^2-e_{n-1}+1
+\end{displaymath}
+
+有一个关于这个递推式的结论是存在一个常数$K\approx 1.264$，使得
+\begin{displaymath}
+e_n=\left\lfloor K^{2^n}+\frac{1}{2} \right\rfloor
+\end{displaymath}
+
+我们令$\pi(x)$为不超过$x$的所有素数的个数总和，$P(n)$为第$n$个素数。我们有下面的近似：
+\begin{displaymath}
+P(n)\sim n\ln n,\quad \pi(x)\sim \frac{x}{\ln x}
+\end{displaymath}
+
+\begin{thrm}[Wilson定理]
+$m$为素数 $\iff m>1, m|(m-1)!+1$
+\end{thrm}
+
+Wilson定理一般不用来进行素数的判别，但是作为一个重要的定理，对于研究素数的性质非常有用。这个定理的证明我们将在后面介绍剩余系的时候阐述。
+
+我们在进行数论研究时常常要对一个数是否是素数进行判断，我们称之为素性检验。一般常用的方法有试除法、费马素性检验、Miller-Rabin测试。试除法最简单，算法复杂度为$O(\sqrt{n})$。费马素性检验是一个随机化算法，其根据是费马小定理\footnote{此内容将在后面介绍。}。费马小定理指的是如果一个$n$是素数，那么对于所有的$0<a<p$，$a^{n-1}\equiv 1\pmod{n}$。如果对于一个$n$，存在一个满足$0<a<p$的$a$使得$a^{n-1}\equiv 1\pmod{n}$，我们就把这个$n$称作\bbold{伪素数}。伪素数几乎肯定是素数，另一方面，不是伪素数的数一定不是素数。如果我们随机检测了一些$a$之后发现$n$是伪素数，那么，$n$就有很大的概率是素数。
+
+Miller-Rabin测试是一种非常快速的素数检验法。要测试$n$是否为质数，首先将$n-1$分解为$n-1=2^sd$的形式。在每次测试开始时，先随机选一个介于$[1,n-1]$的整数$a$，之后如果对所有的$r \in [0,s-1]$，若$a^d \not\equiv 1\pmod{n}$且$a^{2^rd}\not\equiv -1\pmod{n}$，则$n$是合数。否则，$n$有$\frac{3}{4}$的机率为质数。这个测试的实质实际上是对$a^{n-1}\equiv 1\pmod{n}$进行开平方处理，如果所有的$a^{2^rd}\equiv -1\pmod{n}$都不满足的话，$a^d\equiv 1\pmod{n}$是一定满足的。
+
+关于$a$的选取，下面是一个非常有用的列表：
+\begin{itemize}
+\item $n < 1,373,653$，只需要测试$a = 2, 3$。
+\item $n < 9,080,191$，只需要测试$a = 31, 73$。
+\item $n < 4,759,123,141$，只需要测试$a = 2, 7, 61$。
+\item $n < 2,152,302,898,747$，只需要测试$a = 2, 3, 5, 7, 11$。
+\item $n < 3,474,749,660,383$，只需要测试$a = 2, 3, 5, 7, 11, 13$。
+\item $n < 341,550,071,728,321$，只需要测试$a = 2, 3, 5, 7, 11, 13, 17$。
+\end{itemize}
+
+2002年，印度人M. Agrawal、N. Kayal以及N. Saxena提出了AKS素数检验算法，证明了可以在多项式时间内检验素数。
+
+孪生素数是指一对素数，它们之间相差$2$。例如$3$和$5$，$5$和$7$，$11$和$13$，$10016957$和$10016959$等等都是孪生素数。使用著名的筛选理论，挪威的布朗发现小于$x$的孪生素数的个数远小于$\frac{x}{(\log x)^2}$。这表明，所有孪生素数的倒数之和收敛，即收敛到布朗常数。与之相对的，所有素数的倒数之和却是发散的。
+
+可以证明$(p,p+2)$是孪生素数，当且仅当
+\begin{displaymath}
+4((p-1)!+1)\equiv -p \pmod{p(p+2)}
+\end{displaymath}
+
+关于素数还有很多有趣的猜想：
+\begin{itemize}
+\item 是否每个大于2的偶数都可写成两个素数之和？
+\item 是否存在无穷多的孪生素数？
+\item Fibonacci数列内是否存在无穷多的素数？
+\item 是否存在无穷多的梅森素数？
+\item 是否存在无穷个形式如$n^2+1$的素数？
+\end{itemize}
+
+\section{带余除法与辗转相除法}
+\bbold{带余除法}作为数论中最常使用的基本方法，具有很高的实用性。它是数论证明中最重要、最基本、最直接的工具。IMO中的大部分数论题目都可以用带余除法解决，虽然过程可能不太直观，但是并不影响它的地位。
+
+\begin{thrm}[带余数除法]\label{THRM:divide}
+设$a$，$b$是两个给定的整数，$a \neq 0$。那么一定存在唯一的一对整数$q$与$r$，满足
+\begin{equation}
+b=qa+r, \qquad 0 \leq r < \aabs{a}\label{EQU:divide}
+\end{equation}
+此外，$a|b$的充要条件是$r=0$。
+\end{thrm}
+
+在具体应用的时候，往往并不要求$r$满足最小性，第二种形式如下：
+\begin{thrm}
+设$a$，$b$是两个给定的整数，$a \neq 0$，再设$d$是一给定的整数。那么一定存在唯一的一对整数$q_1$与$r_1$，满足
+\begin{equation}
+b=q_1 a+r_1, \qquad d \leq r < \aabs{a}+d \label{EQU:divide2}
+\end{equation}
+此外，$a|b$的充要条件是$a|r_1$。
+\end{thrm}
+
+上面的定理可以由定理\ref{THRM:divide}推出。我们一般把式\ref{EQU:divide}中的$r$称为$b$被$a$除后的\bbold{最小非负余数}。式\ref{EQU:divide2}中的$r_1$称为\bbold{绝对最小余数}。
+
+下面是一个关于\bbold{整数分类}的推论：
+\begin{coro}\label{THRM:mod}
+设$a>0$。任一整数被$a$除后所得的最小非负余数是且仅是$0, 1, \dotsc,a-1$这$a$个数中的一个。
+\end{coro}
+
+\begin{exmp}
+设$a>2$是奇数。证明：
+\begin{enumerate}[(i)]
+\item 一定存在正整数$d \leq a-1$，使得$a|2^d-1$。
+\item 设$d_0$是满足(i)的最小正整数$d$。那么，$a|2^h-1(h \in \N)$的充要条件是$d_0 | h$。
+\end{enumerate}
+\end{exmp}
+\begin{proof}
+先证(i)。考虑以下$a$个数：
+\begin{displaymath}
+2^0,2^1,2^2,\dotsc,2^{a-1}
+\end{displaymath}
+显然，$a \nmid 2^j(0 \leq j <a )$。由定理\ref{THRM:divide}知，对于每一个$j$，$0 \leq j <a$，
+\begin{displaymath}
+2^j=q_j a+r_j, \quad 0<r_j<a
+\end{displaymath}
+所以$a$个余数$r_0,r_1,\dotsc,r_{a-1}$仅可能取$a-1$个值。因此其中必有两个相等，设为$r_i,r_k$，不妨设$0\leq i<k<a$。因而有
+\begin{displaymath}
+a(q_k-q_i)=2^k-2^i=2^i(2^{k-i}-1)
+\end{displaymath}
+所以，$a|2^{k-i}-1$，则$d=k-i\leq a-1$，(i)得证。
+
+下面证(ii)。易证充分性，所以只要证必然性。
+\begin{displaymath}
+h=qd_0+r, \quad 0\leq r<d_0
+\end{displaymath}
+因而有
+\begin{displaymath}
+2^h-1=2^{qd_0+r}-2^r+2^r-1=2^r(2^{qd_0}-1)+(2^r-1)
+\end{displaymath}
+易得$a|2^r-1$，由此及$d_0$的最小性得$r=0$，即$d_0|h$。
+\end{proof}
+
+推论\ref{THRM:mod}是对\bbold{全体整数}被一个固定的正整数$a$除后所得的最小非负余数的情况来说的。特殊的整数被一个固定的正整数$a$除后所得的最小非负余数会有更特殊的性质，例如：
+\begin{enumerate}[(i)]
+\item 两个$4k+3$形式的数的乘积一定是$4k+1$形式的数；
+\item $x^2$被$4$除后所得的非负最小余数只可能是$0,1$；
+\item $x^2$被$8$除后所得的非负最小余数只可能是$0,4$（当$x$是偶数），及$1$（当$x$是奇数）；
+\item $x^2$被$3$除后所得的非负最小余数只可能是$0,1$；
+\item $x^3$被$9$除后所得的非负最小余数只可能是$0,1,8$。
+\end{enumerate}
+
+下面介绍\bbold{辗转相除法}\footnote{本节中的辗转相除法与下面介绍的公约数概念有关，可以同时阅读两个小节}。
+\begin{thrm}[Euclid辗转相除法]\label{THRM:euclid}
+设$u_0,u_1$是给定的两个整数，$u_1 \neq 0$，$u_1 \nmid u_0$。我们一定可以重复应用定理\ref{THRM:divide}得到下面$k+1$个等式：
+\begin{equation}
+\begin{array}{ll}
+u_0 = q_0  u_1 +u_2 ,    &  0 < u_2 < \aabs{u_1} ,\\
+u_1 = q_1  u_2 +u_3 ,    &  0 < u_3 < u_2 ,       \\
+u_2 = q_2  u_3 +u_4 ,    &  0 < u_4 < u_3 ,       \\
+\cdots                   &  \cdots        ,       \\
+u_{k-2} = q_{k-2} u_{k-1} +u_k ,    &  0 < u_k < u_{k-1} ,   \\
+u_{k-1} = q_{k-1}  u_k +u_{k+1} ,    &  0 < u_{k+1} < u_k ,   \\
+u_k = q_k  u_{k+1} .    & 
+\end{array}
+\end{equation}
+\end{thrm}
+
+\begin{thrm}\label{THRM:euclid_p}
+在定理\ref{THRM:euclid}的条件和符号下，我们有
+\begin{enumerate}[(i)]
+\item $u_{k+1}$是$u_0$和$u_1$的最大公约数，也就是
+\begin{equation}
+u_{k+1}=(u_0,u_1)
+\end{equation}
+\item $d|u_0$且$d|u_1$的充要条件是$d|u_{k+1}$；
+\item 存在整数$x_0,x_1$使
+\begin{equation}
+u_{k+1}=x_0 u_0 +x_1 u_1
+\end{equation}
+\end{enumerate}
+\end{thrm}
+
+使用Euclid辗转相除法，我们还可以求出$ax+by=d$的解。从后面的内容我们知道，这个不定方程有解的充要条件是$(a,b)|d$。我们先求出$ax+by=(a,b)$的解，然后可以得到原方程的解。具体的做法是使用迭代。我们先考虑和原始的辗转相除法相同的过程，当最后$b=0$时，$a'x=a'$的解是$x=1, y=0$。对于$ax+by=(a,b)$，下一层的运算结果是$bx'+(a\mod b)y'=(a,b)$，那么可以解得$x=y',y=x'-\ffloor{\frac{a}{b}}y'$，因为$\ffloor{\frac{a}{b}}\times b+(a\mod b)=a$。
+
+另外，辗转相除法在编写代码时，是可以使用位运算优化的。
+
+\section{最大公约数和最小公倍数}
+
+下面引进最大公约数和最小公倍数的概念。
+
+\begin{defn}
+设$a_1, a_2$是两个整数。如果$d|a_1$且$d|a_2$，那么，$d$就是$a_1, a_2$的\bbold{公约数}。关于其一般性的定义，不再赘述。
+\end{defn}
+
+\begin{defn}
+设$a_1,a_2$是两个不全为$0$的整数，我们把$a_1,a_2$的公约数中最大的那个称为$a_1,a_2$的\bbold{最大公约数}，记作$(a_1,a_2)$。我们用$\mathscr{D}(a_1,a_2,\dotsc,a_k)$来表示$a_1,a_2,\dotsc,a_k$的公约数集合。
+\end{defn}
+
+\begin{thrm}
+\begin{enumerate}[(i)]
+\item $(a_1,a_2)=(a_2,a_1)=(-a_1,a_2)$；一般地
+\begin{align}
+(a_1,a_2,\dotsc,a_i,\dotsc,a_k)&=(a_i,a_2,\dotsc,a_1,\dotsc,a_k)\nonumber\\
+                               &=(-a_1,a_2,\dotsc,a_k)\nonumber
+\end{align}
+\item 若$a_1|a_j, j=2,\dotsc,k$，则
+\begin{displaymath}
+(a_1,a_2)=(a_1,a_2,\dotsc,a_k)=(a_1)=\aabs{a_1}
+\end{displaymath}
+\item 对任意的整数$x, (a_1,a_2)=(a_1,a_2,a_1 x)$，
+\begin{displaymath}
+(a_1,\dotsc,a_k)=(a_1,\dotsc,a_k,a_1 x)
+\end{displaymath}
+\item 对任意的整数$x, (a_1,a_2)=(a_1,a_2+a_1 x)$，
+\begin{displaymath}
+(a_1,a_2,a_3,\dotsc,a_k)=(a_1,a_2+a_1 x,a_3,\dotsc,a_k)
+\end{displaymath}
+\item 若$p$是素数，则
+\begin{displaymath}
+(p,a_1) = \left\{
+  \begin{array}{ll}
+  p & p | a_1\\
+  1 & p \nmid a_1
+  \end{array}
+\right.
+\end{displaymath}
+\end{enumerate}
+\end{thrm}
+
+一组数的最大公约数等于$1$是这组数的一个重要性质，为此我们引入一个概念。
+
+\begin{defn}
+若$(a_1,a_2)=1$，则称$a_1$和$a_2$是\bbold{既约}的，或是\bbold{互素}的。一般性的形式不再赘述。
+\end{defn}
+
+\begin{thrm}
+如果存在整数$x_1,x_2,\dotsc,x_k$，使得$a_1 x_1 +a_2 x_2 + \dotsb + a_k x_k =1$，则$a_1, a_2, \dotsc, a_k$是既约的。
+\end{thrm}
+
+\begin{thrm}\label{THRM:gcd}
+设正整数$m|(a_1,\dotsc,a_k)$。我们有
+\begin{equation}
+m(a_1/m,\dotsc,a_k/m)=(a_1,\dotsc,a_k)
+\end{equation}
+令$m=(a_1,\dotsc,a_k)$可以得到其特别情形。
+\end{thrm}
+
+\begin{defn}
+设$a_1,a_2$是两个均不等于零的整数。如果$a_1|l$且$a_2|l$，则称$l$是$a_1$和$a_2$的\bbold{公倍数}。一般情况容易推出。此外以$\mathscr{L}(a_1,\dotsc,a_k)$作为$a_1,\dotsc,a_k$的所有公倍数的集合。
+\end{defn}
+
+\begin{defn}
+设整数$a_1$，$a_2$均不为零。我们把$a_1$和$a_2$的正的公倍数中的最小的称为$a_1$和$a_2$的\bbold{最小公倍数}，记作$[a_1,a_2]$。
+\end{defn}
+
+由定义立即推得
+\begin{thrm}
+\begin{enumerate}[(i)]
+\item $[a_1,a_2]=[a_2,a_1]=[-a_1,a_2]$；一般地
+\begin{align}
+[a_1,a_2,\dotsc,a_i,\dotsc,a_k]&=[a_i,a_2,\dotsc,a_1,\dotsc,a_k]\nonumber\\
+                               &=[-a_1,a_2,\dotsc,a_k]\nonumber
+\end{align}
+\item 若$a_2|a_1$，则$[a_1,a_2]=\aabs{a_1}$；若$a_j|a_1(2 \leq j \leq k)$，则
+\begin{displaymath}
+[a_1,\dotsc,a_k]=\aabs{a_1}
+\end{displaymath}
+\item 对任意的$d|a_1$，
+\begin{displaymath}
+[a_1,a_2]=[a_1,a_2,d]; [a_1,\dotsc,a_k]=[a_1,\dotsc,a_k,d]
+\end{displaymath}
+\end{enumerate}
+\end{thrm}
+
+\begin{thrm}
+设$m>0$，我们有
+\begin{displaymath}
+[ma_1,\dotsc,ma_k]=m[a_1,\dotsc,a_k]
+\end{displaymath}
+\end{thrm}
+
+上面简单介绍了一些公约数和公倍数的理论和定理，下面将介绍最大公约数理论\footnote{公倍数的性质并不是很重要。}。我们将用三种途径建立最大公约数理论。
+
+\paragraph{第一个途径}
+我们通过用带余除法证明最小公倍数的性质来实现。
+
+\begin{thrm}
+$a_j|c(1\leq j\leq k)$的充要条件是$[a_1,\dotsc,a_k]|c$。
+\end{thrm}
+\begin{proof}
+充分性显然。设$L=[a_1,\dotsc,a_k]$。得
+\begin{displaymath}
+c=qL+r,\quad 0\leq r<L
+\end{displaymath}
+由此及$a_j|c$推出$a_j|r$，所以$r$是公倍数。进而，又由$0\leq r<L$得$r=0$，所以$L|c$。
+\end{proof}
+
+该定理表明公倍数一定是最小公倍数的倍数。因此，最小公倍数中的最小指的是“整除”意义下的最小。
+
+\begin{thrm}
+设$D$是正整数。那么，$D=(a_1,\dotsc,a_k)$的充要条件是：
+\begin{enumerate}[(i)]
+\item $D|a_j(1\leq j\leq k)$；
+\item 若$d|a_j(1\leq j\leq k)$，则$d|D$。
+\end{enumerate}
+\end{thrm}
+
+该定理表明，公约数一定是最大公约数的约数。这也表明了最大公约数中最大的含义。
+
+\begin{thrm}
+设$(m,a)=1$，则有$(m,ab)=(m,b)$。
+\end{thrm}
+\begin{proof}
+$(m,b)=(m,b(m,a))=(m,(mb,ab))=(m,mb,ab)=(m,ab)$
+\end{proof}
+
+\begin{thrm}
+设$(m,a)=1$。那么，若$m|ab$，则$m|b$。
+\end{thrm}
+
+\begin{thrm}
+$[a_1,a_2](a_1,a_2)=\aabs{a_1a_2}$
+\end{thrm}
+
+这个定理刻画了最大公约数和最小公倍数之间的关系。
+
+\begin{exmp}
+设$p$是素数。证明：
+\begin{enumerate}[(i)]
+\item $p|\binom{p}{j}$，$1\leq j\leq p-1$；
+\item 对任意正整数$a$，$p|a^p-a$；
+\item 若$(a,p)=1$，则$p|a^{p-1}-1$。
+\end{enumerate}
+\end{exmp}
+\begin{proof}
+已知组合数
+\begin{displaymath}
+\binom{p}{j}=\frac{p!}{j!(p-j)!}
+\end{displaymath}
+是整数，即$j!(p-j)!|p!$。由于$p$是素数，所以，对任意$1\leq i\leq p-1$有$(p,i)=1$。因此
+\begin{displaymath}
+(p,j!(p-j)!)=1,\quad 1\leq j\leq p-1
+\end{displaymath}
+进而推出，当$1\leq j\leq p-1$时$j!(p-j)!|(p-1)!$，(i)得证。
+
+下面用归纳法证明(ii)。$a=1$时显然成立。
+\begin{align}
+(n+1)^p-(n+1)&=n^p+\binom{p}{1}n^{p-1}+\dotsb+\binom{p}{p-1}n+1-(n+1)\nonumber \\
+             &=n^p-n+p \times A  \nonumber
+\end{align}
+这里A是一个整数。(ii)得证。由(ii)可以得到(iii)。
+\end{proof}
+
+\paragraph{第二个途径}
+我们用关于$a_1,\dotsc,a_k$的整系数线性组合来刻画。
+
+\begin{thrm}
+设$a_1,\dotsc,a_k$是不全为零的整数。我们有
+\begin{enumerate}[(i)]
+\item $(a_1,\dotsc,a_k)=\min\{s=a_1x_1+\dotsb+a_k x_k : x_j\in \Z(1\leq j\leq k),s>0\}$，即$a_1,\dotsc,a_k$的最大公约数等于$a_1,\dotsc,a_k$的所有整系数线性组合组成的集合$S$中最小的整数。
+\item 一定存在一组整数$x_{1,0},\dotsc,x_{k,0}$使得
+\begin{equation}
+(a_1,\dotsc,a_k)=a_1 x_{1,0}+\dotsb+a_k x_{k,0}
+\end{equation}
+\end{enumerate}
+\end{thrm}
+\begin{proof}
+由于$0<a_1^2 +\dotsb+a_k^2\in S$，所以集合$S$中有正整数。由最小自然数原理得$S$中必有最小数$s_0$。显然，对于任一公约数$d|a_j(1\leq j\leq k)$，则必有$d$整除$S$任一元素，那么$d|s_0$。所以，$\aabs{d}\leq s_0$。另外
+\begin{displaymath}
+a_j=q_j s_0+r_j,\quad 0\leq r_j<s_0
+\end{displaymath}
+因为$s_0$可以被$x_1,\dotsc,x_k$表示，$a_j$也可以，而$r_j=a_j-q_j s_0$，所以$r_j\in S$。如果$r_j>0$，则与$s_0$最小矛盾，所以$r_j=0$。即$s_0$是最大公约数。
+\end{proof}
+y
+有了这一个基础性的定理，前面已经介绍过的有关最大公约数的定理都可以重新建立。虽然证明过程中没有介绍如何求出$x_{1,0},\dotsc,x_{k,0}$，但是应用辗转相除法，我们可以求出这种线性组合的解\footnote{方法就留给大家思考，比较简单。}。
+
+\paragraph{第三个途径}
+我们用辗转相除法来刻画。由定理\ref{THRM:euclid_p}作为基础，引出相关的定理、性质。具体不再赘述。
+
+\section{算术基本定理}
+
+\begin{thrm}
+设$p$是素数，$p|a_1 a_2$。那么，$p|a_1$或$p|a_2$至少有一个成立。一般地，若$p|a_1 \dotsm a_k$，
+则$p|a_1, \dotsc , p|a_k$至少有一个成立。
+\end{thrm}
+
+\begin{thrm}[算术基本定理]
+设$a>1$，那么，必有
+\begin{equation}\label{EQU:p_div2}
+a=p_1 p_2 \dotsm p_s
+\end{equation}
+其中，$p_j (1 \leq j \leq s)$是素数，且在不计次序的前提下，表示式\ref{EQU:p_div2}是唯一的。
+\end{thrm}
+
+这个定理的证明可以用反证法得到。该定理非常重要，尤其是它告诉我们，这种表达式具有唯一性和必然存在性。我们把\ref{EQU:p_div2}中的相同素因数合并，得到
+\begin{equation}\label{EQU:p_div}
+a=p_1^{\alpha_1} \dotsm p_s^{\alpha_s},\quad p_1<p_2<\dotsb<p_s
+\end{equation}
+
+我们把式\ref{EQU:p_div}称为$a$的\bbold{标准素因数分解式}。
+
+\begin{coro}
+设$a$由式\ref{EQU:p_div}给出。那么，$d$是$a$的正除数的充要条件是
+\begin{equation}
+d=p_1^{e_1}\dotsm p_s^{e_s},\quad 0\leq e_j\leq \alpha_j,1\leq j\leq s
+\end{equation}
+\end{coro}
+
+\begin{coro}
+设$a$由式\ref{EQU:p_div}给出，
+\begin{displaymath}
+b=p_1^{\beta_1}\dotsm p_s^{\beta_s}
+\end{displaymath}
+这里允许某个$\alpha_j$或$\beta_j$为零。那么
+\begin{gather}
+(a,b)=p_1^{\delta_1}\dotsm p_s^{\delta_s},\quad \delta_j=\min(\alpha_j,\beta_j),1\leq j\leq s\\
+[a,b]=p_1^{\gamma_1}\dotsm p_s^{\gamma_s},\quad \gamma_j=\max(\alpha_j,\beta_j),1\leq j\leq s
+\end{gather}
+以及
+\begin{displaymath}
+(a,b)[a,b]=ab
+\end{displaymath}
+\end{coro}
+
+\begin{coro}
+设$a$是正整数，$\tau(a)$表示$a$的所有正除数的个数（也叫做\bbold{除数函数}）。若$a$有标准因数分解式\ref{EQU:p_div}，则
+\begin{displaymath}
+\tau(a)=(\alpha_1+1)\dotsm(\alpha_s+1)=\tau(p_1^{\alpha_1})\dotsm\tau(p_s^{\alpha_s})
+\end{displaymath}
+\end{coro}
+
+\begin{coro}
+设$a$是正整数，$\sigma(a)$表示$a$的所有正除数之和（也叫做\bbold{除数和函数}）。那么，$\sigma(1)=1$，当$a$有标准因数分解式\ref{EQU:p_div}时
+\begin{align}
+\sigma(a)&=\frac{p_1^{a_1+1}}{p_1-1}\dotsm\frac{p_s^{a_s+1}}{p_s-1}=\prod_{j=1}^s\frac{p_j^{a_j+1}}{p_j-1}\nonumber \\
+         &=\sigma(p_1^{\alpha_1})\dotsm\sigma(p_s^{\alpha_s})
+\end{align}
+\end{coro}
+
+\begin{exmp}
+求$\displaystyle \sum_{d|180}\frac{1}{d}$。
+\end{exmp}
+\begin{proof}
+题目中所给的符号表示对于180的所有约数求和。
+\begin{displaymath}
+\sum_{d|a}\frac{1}{d}=\sum_{d|a}\frac{1}{a/d}=\frac{1}{a}\sum_{d|a}d=\frac{1}{a}\sigma(a)
+\end{displaymath}
+所以我们得到
+\begin{displaymath}
+\sum_{d|180}\frac{1}{d}=\frac{1}{180}\sigma(180)=\frac{91}{30}
+\end{displaymath}
+\end{proof}
+
+一个正整数$m$被称为完全数当$\sigma(m)=2m$。我们所知道的完全数有$6,28,496,8128,33550336,\dotsc$，一共有$47$个。目前发现的所有完全数都是偶数，有定理证明，如果存在奇完全数，其形式必然是$12^p+1$或$36^p+9$，其中$p$是素数。完全数有许多有趣的性质：
+\begin{enumerate}[(i)]
+\item 都可以表示为连续的自然数和。
+\item 它们的全部因数的倒数之和都是$2$，因此每个完全数都是调和数。
+\item 除$6$以外的完全数，还可以表示成连续奇立方数之和。
+\item 完全数都可以表达为$2$的一些连续正整数次幂之和。
+\item 完全数都是以$6$或$8$结尾。如果以$8$结尾，那么就肯定是以$28$结尾。
+\item 除$6$以外的完全数，被$9$除都余$1$。
+\end{enumerate}
+
+\section{阶乘的分解式}
+这一节的内容比较简单，主要是对$n!$的讨论。
+
+若素数$p|n!$，则必有$p|k,1\leq k\leq n$；另一方面，任一素数$p\leq n$必有$p|n!$。所以，$n!$的标准素因数分解式必为
+\begin{displaymath}
+n!=p_1^{\alpha_1} \dotsm p_s^{\alpha_s},\quad 2=p_1<p_2<\dotsb<p_s\leq n
+\end{displaymath}
+
+因此，我们求$n!$的分解式的问题被转化为了求所有的$\alpha_j(1\leq j\leq s)$。我们先引进一个符号，记号
+\begin{displaymath}
+a^k\parallel b
+\end{displaymath}
+表示$b$恰好被$a$的$k$次方整除，也就是
+\begin{displaymath}
+a^k|b,a^{k+1}\nmid b
+\end{displaymath}
+
+\begin{thrm}
+设$n$是正整数，$p$是素数。再设$\alpha=\alpha(p,n)$满足$p^\alpha\parallel n!$，那么
+\begin{displaymath}
+\alpha=\alpha(p,n)=\sum_{j=1}^\infty \left[ \frac{n}{p^j} \right]
+\end{displaymath}
+\end{thrm}
+
+这个定理的证明非常“直观”，基本上不需要太复杂的推导。
+
+\begin{coro}
+设$n$是正整数。我们有
+\begin{displaymath}
+n!=\prod_{p\leq n} p^{\alpha(p,n)}
+\end{displaymath}
+\end{coro}
+
+我们如果想要求$\alpha(p,n)$，可以令
+\begin{displaymath}
+\epsilon_p(n!)=\alpha(p,n)
+\end{displaymath}
+
+那么
+
+\begin{align}
+\epsilon_p(n!)&<\frac{n}{p}+\frac{n}{p^2}+\frac{n}{p^3}+\dotsb\nonumber\\
+              &=\frac{n}{p}\left(1+\frac{1}{p}+\frac{1}{p^2}+\dotsb\right)\nonumber\\
+              &=\frac{n}{p}\cdot\frac{p}{n-1}\nonumber\\
+              &=\frac{n}{p-1}
+\end{align}
+
+这是一个很精确的上界。
+
+\begin{coro}
+$m$个相邻整数的乘积可以被$m!$整除。
+\end{coro}
+
+我们对于$n!$还有一个近似公式，就是：
+\begin{displaymath}
+n!\sim \sqrt{2\pi n}\left(\frac{n}{e}\right)^n
+\end{displaymath}
+
+这个界我们称之为Stirling近似公式。相对于这个比较精确的界，我们可以得到一些不太精确的界，比如
+\begin{displaymath}
+n!\leq \frac{(n+1)^n}{2^n}
+\end{displaymath}
+
+我们如果把Stirling近似公式和刚才的$\epsilon_p(n!)$的近似公式结合起来，又可以得到一个$\pi(x)$的下界。因为
+\begin{displaymath}
+p^{\epsilon_p(n!)}<p^{n/(p-1)}
+\end{displaymath}
+
+所以，如果一个整数$n$有$k$个不同的素因数，那么$n!<2^{nk}$。我们把$k$用$\pi(n)$替换，得到
+\begin{displaymath}
+n!<2^{n\pi(n)}
+\end{displaymath}
+所以
+\begin{displaymath}
+n\pi(n)>n\lg(n/e)+\frac{1}{2}\lg(2\pi n)
+\end{displaymath}
+推得
+\begin{displaymath}
+\pi(n)>\lg(n/e)
+\end{displaymath}
+
+不过这个下界比较弱。
+
+
+\chapter{同余}
+本章将讨论有关同余理论的基本概念和性质。同余的概念主要是：同余，同余式，同余类，完全剩余系，既约剩余系。
+
+\section{同余}
+
+\begin{defn}[同余]
+设$m\neq 0$。若$m|a-b$，即$a-b=km$，则称$m$为\bbold{模}，$a$\bbold{同余}于$b$模$m$，以及$b$是$a$对模m的\bbold{剩余}。记作
+\begin{equation}\label{EQU:equiv}
+a\equiv b\pmod{m}
+\end{equation}
+不然，则称$a$不\bbold{同余}于$b$模$m$，$b$不是$a$对模m的\bbold{剩余}，记作
+\begin{displaymath}
+a\not\equiv b\pmod{m}
+\end{displaymath}
+式\ref{EQU:equiv}称为模$m$的\bbold{同余式}。
+\end{defn}
+
+\begin{thrm}
+$a$同余于$b$模$m$的充要条件是$a$和$b$被$m$除后的余数相等。也就是如果
+\begin{eqnarray*}
+a=q_1 m+r_1,\quad 0\leq r_1<m \\
+b=q_2 m+r_2,\quad 0\leq r_2<m
+\end{eqnarray*}
+则$r_1=r_2$。
+\end{thrm}
+
+\begin{prop}
+同余是一种等价关系，即有
+\begin{eqnarray*}
+&a\equiv a\pmod{m}\\
+&a\equiv b\pmod{m} \iff b\equiv a\pmod{m} \\
+&a\equiv b\pmod{m}, b \equiv c\pmod{m} \Rightarrow a\equiv c\pmod{m}
+\end{eqnarray*}
+\end{prop}
+
+\begin{prop}
+同余式可以相加，即若有
+\begin{equation}\label{EQU:equiv_plus}
+a\equiv b\pmod{m},\quad c\equiv d\pmod{m}
+\end{equation}
+则
+\begin{displaymath}
+a+c\equiv c+d\pmod{m}
+\end{displaymath}
+\end{prop}
+
+\begin{prop}
+同余式可以相乘，即若有式\ref{EQU:equiv_plus}，则
+\begin{displaymath}
+ac\equiv cd\pmod{m}
+\end{displaymath}
+\end{prop}
+
+\begin{prop}\label{PROP:equiv_pol}
+设$f(x)=a_n x^n+\dotsb+a_0$，$g(x)=b_n x^n+\dotsb+b_0$是整系数多项式\footnote{以后如果无特殊说明，多项式都是整系数.}，满足
+\begin{equation}\label{EQU:equiv_pol0}
+a_j\equiv b_j\pmod{m},\quad 0\leq j\leq n
+\end{equation}
+那么，若$a\equiv b\pmod{m}$，则
+\begin{displaymath}
+f(a)\equiv g(b)\pmod{m}
+\end{displaymath}
+特别的，对所有整数$x$，有
+\begin{equation}\label{EQU:equiv_pol1}
+f(x)\equiv g(x)\pmod{m}
+\end{equation}
+\end{prop}
+
+由性质\ref{PROP:equiv_pol}可以引进
+
+\begin{defn}
+设$f(x)=a_n x^n+\dotsb+a_0$，$g(x)=b_n x^n+\dotsb+b_0$。当满足式\ref{EQU:equiv_pol0}时，称多项式$f(x)$同余于多项式$g(x)$模$m$，记作
+\begin{displaymath}
+f(x)\equiv g(x)\pmod{m}
+\end{displaymath}
+当满足式\ref{EQU:equiv_pol1}时，称多项式$f(x)$\bbold{等价}于多项式$g(x)$模$m$。
+\end{defn}
+
+\begin{prop}
+设$d\geq 1$，$d|m$。那么，若式\ref{EQU:equiv}成立，则
+\begin{displaymath}
+a\equiv b\pmod{d}
+\end{displaymath}
+\end{prop}
+
+\begin{prop}
+设$d\neq 0$。那么同余式\ref{EQU:equiv}等价于
+\begin{displaymath}
+da\equiv db\pmod{dm}
+\end{displaymath}
+\end{prop}
+
+下面要介绍的是由进一步的整除知识推导出的结论。
+
+\begin{prop}
+同余式
+\begin{equation}
+ca\equiv cb\pmod{m}
+\end{equation}
+等价于
+\begin{displaymath}
+a\equiv b\pmod{m/(c,m)}
+\end{displaymath}
+特别的，当$(c,m)=1$时，可以从两边约去$c$。
+\end{prop}
+
+\begin{prop}
+若$m\geq 1$，$(a,m)=1$，则存在$c$使得
+\begin{equation}
+ca\equiv 1\pmod{m}
+\end{equation}
+我们把$c$称为是$a$对模$m$的逆，记作$a^{-1}\pmod{m}$或$a^{-1}$。
+\end{prop}
+
+\begin{prop}
+同余式组
+\begin{displaymath}
+a\equiv b\pmod{m_j},\quad j=1,2,\dotsc,k
+\end{displaymath}
+同时成立的充要条件是
+\begin{displaymath}
+a\equiv b\pmod{[m_1,\dotsc,m_k]}
+\end{displaymath}
+\end{prop}
+
+\section{同余类与剩余系}
+
+\begin{defn}[同余类（剩余类）]
+对给定的模$m$，整数的同余关系是一个等价关系，因此全体整数对模$m$是否同余分为若干个两两不相交的集合，使得在同一个集合中的任意两个数对模$m$一定同余，而属于不同集合中的两个数对模$m$一定不同余。每一个这样的集合称为是模$m$的\bbold{同余类}。我们以$r\mod m$表示$r$所属的模$m$的同余类。
+\end{defn}
+
+由定义立即推出
+
+\begin{thrm}
+\begin{enumerate}[(i)]
+\item $r\mod m=\{r+km:k\in \Z\}$；
+\item $r\mod m=s\mod m$的充要条件是$r\equiv s\pmod{m}$；
+\item 对任意的$r,s$，要么$r\mod m=s\mod m$，要么$r\mod m$与$s\mod m$的交为空集。
+\end{enumerate}
+\end{thrm}
+
+\begin{thrm}
+对给定的模$m$，有且恰有$m$个不同的模$m$的同余类，它们是
+\begin{equation}
+0\mod m,1\mod m,\dotsc,(m-1)\mod m
+\end{equation}
+我们记由这些同余类为元素所组成的集合为
+\begin{equation}
+\Z/m\Z=\Z_m=\{j\mod m:0\leq j\leq m-1\}
+\end{equation}
+\end{thrm}
+
+由鸽巢原理立即推出
+
+\begin{thrm}
+\begin{enumerate}[(i)]
+\item 在任意取定的$m+1$个整数中，必有两个数对模$m$同余；
+\item 存在$m$个数两两对模$m$不同余。
+\end{enumerate}
+\end{thrm}
+
+\begin{defn}[完全剩余系]
+一组数$y_1,\dotsc,y_s$称为是模$m$的\bbold{完全剩余系}（或者简称为剩余系），如果对于任意的$a$有且仅有一个$y_j$是$a$对模$m$的剩余，即$a$同余于$y_j$模$m$。
+\end{defn}
+
+\begin{thrm}
+设$m_1|m$。那么，对任意的$r$有
+\begin{displaymath}
+r\mod m \subseteq r\mod m_1
+\end{displaymath}
+即
+\begin{displaymath}
+r+m\Z \subseteq r+m_1\Z
+\end{displaymath}
+\end{thrm}
+
+上面的定理用同余式的语言可以重新描述为
+
+\begin{thrm}
+设$m_1|m$。那么，对任意的$r$，
+\begin{displaymath}
+n\equiv r\pmod{m_1}
+\end{displaymath}
+成立的充要条件是以下$d=m/m_1$个同余式有且仅有一个成立：
+\begin{displaymath}
+n\equiv r+jm_1\pmod{m},\quad 0\leq j<d
+\end{displaymath}
+\end{thrm}
+
+\begin{thrm}
+模$m$的一个同余类中的任意两个整数$a_1,a_2$与$m$的最大公约数相等，即$(a_1,m)=(a_2,m)$。
+\end{thrm}
+
+\begin{defn}
+模$m$的同余类$r\mod m$称为是模$m$的\bbold{既约剩余类}，如果$(r,m)=1$。模$m$的所有既约剩余类的个数记作$\varphi(m)$，通常称为\bbold{Euler函数}。
+\end{defn}
+
+\begin{defn}
+一组数$z_1,\dotsc,z_t$称为是模$m$的\bbold{既约剩余系}，如果$(z_j,m)=1,1\leq j\leq t$；以及对任意的$a$，$(a,m)=1$，有且仅有一个$z_j$是$a$对模$m$的剩余，即$a$同余于$z_j$模$m$。
+\end{defn}
+
+\begin{thrm}
+模m的所有不同的既约同余类是：
+\begin{equation}
+r\mod m,\quad (r,m)=1,\quad 1\leq r\leq m
+\end{equation}
+$\varphi(m)$等于$1,2,\dotsc,m$中和$m$既约的数的个数。
+\end{thrm}
+
+\begin{thrm}
+\begin{enumerate}[(i)]
+\item 在任意取定的$\varphi(m)+1$个均和$m$既约的整数中，必有两个数对模$m$同余；
+\item 存在$\varphi(m)$个数两两对模$m$不同余且均和$m$既约。
+\end{enumerate}
+\end{thrm}
+
+Euler函数$\varphi(m)$在数论中是十分重要的，有很多有关它的有趣性质。
+
+\begin{thrm}
+设$p$是素数，$k\geq 1$，那么，
+\begin{displaymath}
+\varphi(p^k)=p^{k-1}(p-1)
+\end{displaymath}
+以及模$p^k$的既约同余类是：
+\begin{displaymath}
+(a+bp)\mod p^k,\quad 1\leq a\leq p-1, 0\leq b\leq p^{k-1}-1
+\end{displaymath}
+\end{thrm}
+
+\section{Euler函数的性质与Fermat-Euler定理}
+
+\begin{thrm}
+设$m=m_1 m_2$。
+\begin{enumerate}[(i)]
+\item 若$m_1$与$m_2$有相同的素因数，那么
+\begin{equation}
+\varphi(m)=m_2\varphi(m_1)
+\end{equation}
+\item 若$(m_1,m_2)=1$，则
+\begin{equation}
+\varphi(m)=\varphi(m_1)\varphi(m_2)
+\end{equation}
+那么，若有
+\begin{displaymath}
+m=p_1^{\alpha_1} \dotsm p_k^{\alpha_k}
+\end{displaymath}
+则
+\begin{equation}
+\varphi(m)=m\prod_{p|m}\left(1-\frac{1}{p}\right)
+\end{equation}
+\end{enumerate}
+\end{thrm}
+
+由此可见，Euler函数是一个积性函数。
+
+\begin{thrm}
+对任意正整数$m$有
+\begin{displaymath}
+\sum_{d|m}\varphi(d)=m
+\end{displaymath}
+\end{thrm}
+
+下面将介绍\bbold{Fermat-Euler定理}。
+
+\begin{thrm}[Fermat-Euler]
+设$(a,m)=1$，则有
+\begin{equation}\label{EQU:euler-thrm}
+a^{\varphi(m)}\equiv 1\pmod{m}
+\end{equation}
+特别的，当$p$为素数时，有
+\begin{equation}\label{EQU:fermat-thrm}
+a^{p-1}\equiv 1\pmod{p}
+\end{equation}
+\end{thrm}
+\begin{proof}
+首先，我们阐明一个性质。若$r_1,\dotsc,r_{\varphi(m)}$和$r'_1,\dotsc,r'_{\varphi(m)}$都是模$m$的既约剩余系，那么
+\begin{displaymath}
+\prod^{\varphi(m)}_{j=1}r_j\equiv \prod^{\varphi(m)}_{j=1}r'_j\pmod{m}
+\end{displaymath}
+
+下面，我们取模$m$的一组既约剩余系$r_1,\dotsc,r_{\varphi(m)}$。当$(a,m)=1$时，$ar_1,\dotsc,ar_{\varphi(m)}$也是模$m$的既约剩余系。由此得
+\begin{displaymath}
+\prod^{\varphi(m)}_{j=1}r_j\equiv \prod^{\varphi(m)}_{j=1}(ar_j)=a^{\varphi(m)}\prod^{\varphi(m)}_{j=1}r_j
+\end{displaymath}
+立刻得到式\ref{EQU:euler-thrm}。式\ref{EQU:fermat-thrm}也可以由此推出。
+\end{proof}
+
+我们一般称式\ref{EQU:euler-thrm}为Euler定理，而称式\ref{EQU:fermat-thrm}为Fermat小定理。
+
+如果$m=p_1^{\alpha_1}\dotsm p_s^{\alpha_s},p_1<\dotsb<p_s$，另外
+\begin{displaymath}
+c_j=\varphi(p_j^{\alpha_j}),\alpha=\max(\alpha_1,\dotsc,\alpha_s)
+\end{displaymath}
+那么，对任意整数$a$有如下的性质
+\begin{enumerate}[(i)]
+\item $a^{\alpha+\varphi(m)}\equiv a^\alpha\pmod{m}$；
+\item $a^m\equiv a^{m-\varphi(m)}\pmod{m}$；
+\item $a^\alpha f(a)\equiv 0\pmod{m}$，其中$f(x)$是多项式$x^{c_1}-1,\dotsc,x^{c_s}-1$的最小公倍式；
+\item 如果$\alpha_1=\dotsb=\alpha_s=1$，那么$a^{1+\varphi(m)}\equiv a\pmod{m}$。
+\end{enumerate}
+
+我们把令$a^d\equiv 1\pmod{m}$成立的最小正整数$d$称为$\delta_m(a)$。这里必有
+\begin{displaymath}
+\delta_m(a)|\varphi(m)
+\end{displaymath}
+
+\begin{thrm}
+设$(a,m)=1$。那么，$d_0=\delta_m(a)$的充要条件是
+\begin{equation}
+a^{d_0}\equiv 1\pmod{m}
+\end{equation}
+及
+\begin{equation}\label{EQU:detla_ma}
+a^0=1,a,\dotsc,a^{d_0-1}
+\end{equation}
+对模$m$两两不同余。特别的，$d_0=\varphi(m)$的充要条件是式\ref{EQU:detla_ma}给出了$m$的一组既约剩余系。
+\end{thrm}
+
+本节介绍的内容有一个非常著名的应用——\bbold{RSA密钥系统}。该系统由R.L.Rivest，A.Shamir，L.Adleman于1978年提出。
+
+设$n=pq$，$p,q$是两个不同的大素数，再设正整数$\alpha,\beta$满足
+\begin{align}\label{EQU:rsa_ab}
+\alpha\beta&\equiv 1\pmod{\varphi(n)}\nonumber\\
+           &\equiv 1\pmod{(p-1)(q-1)}
+\end{align}
+这样，对任一整数$A$，$0\leq A<n$，必有唯一的整数$B$满足
+\begin{displaymath}
+B\equiv A^\alpha\pmod{n},\quad 0\leq B<n
+\end{displaymath}
+容易证明：对任意整数$k$有
+\begin{displaymath}
+k^{\alpha\beta}\equiv k\pmod{n}
+\end{displaymath}
+因此，有
+\begin{displaymath}
+B^{\beta}\equiv A^{\alpha\beta}\equiv A\pmod{n}
+\end{displaymath}
+
+这样，如果某甲知道了$\alpha,n$（不知道$p,q$），他为了把$A$发给知道$p,q$的某乙而不让别人知道，可以把$B$发给某乙，因为乙可以通过式\ref{EQU:rsa_ab}来确定$\beta$，从而由$B$得到$A$。由于大整数的素因数分解是很困难的，所以，不知道$p,q$的人很难获得A。这就是RSA密钥系统。
+
+\section{Wilson定理}
+
+\begin{thrm}[Wilson]
+设$p$是素数，$r_1,\dotsc,r_{p-1}$是模$p$的既约剩余系，我们有
+\begin{equation}
+r_1\dotsm r_{p-1}\equiv -1\pmod{p}
+\end{equation}
+特别的
+\begin{equation}
+(p-1)!\equiv -1\pmod{p}
+\end{equation}
+\end{thrm}
+\begin{proof}
+当$p=2$时，结论成立。所以设$p\geq 3$。
+
+对这一组给定的既约剩余系中每一个$r_i$，必然存在一个唯一的$r_j$使得
+\begin{equation}\label{EQU:wilson_proof}
+r_i r_j\equiv 1\pmod{p}
+\end{equation}
+使$r_i=r_j$的充要条件是
+\begin{displaymath}
+r_i^2\equiv 1\pmod{p}
+\end{displaymath}
+即
+\begin{displaymath}
+(r_i-1)(r_i+1)\equiv 0\pmod{p}
+\end{displaymath}
+由于$p$是素数且$p\geq 3$，所以上式成立当且仅当
+\begin{displaymath}
+r_i-1\equiv 0\pmod{p}
+\end{displaymath}
+或
+\begin{displaymath}
+r_i+1\equiv 0\pmod{p}
+\end{displaymath}
+由于$p\geq 3$，所以这两个条件不能同时成立。因此，在既约剩余系中，除了
+\begin{displaymath}
+r_i\equiv 1,-1\pmod{p}
+\end{displaymath}
+这两个数以外，对其它的$r_i$必有$r_j\neq r_i$使得式\ref{EQU:wilson_proof}成立。不妨设$r_1\equiv 1\pmod{p}$，$r_{p-1}\equiv -1\pmod{p}$。这样，在这组剩余系中除去满足上式的两个数以外，其它的数恰好可以按照式\ref{EQU:wilson_proof}两两分完，即满足
+\begin{displaymath}
+r_2\dotsm r_{p-2}\equiv 1\pmod{p}
+\end{displaymath}
+所以定理得证。
+\end{proof}
+
+需要说明的是，这个定理并不能用来检验一个数是否是素数。
+
+\begin{thrm}
+设素数$p\geq 3$，$l\geq 1$。$c=\varphi(p^l)$，以及$r_1,\dotsc,r_c$是模$p^l$的一组既约剩余系。我们有
+\begin{equation}
+r_1\dotsm r_c\equiv -1\pmod{p^l}
+\end{equation}
+特别的
+\begin{equation}
+\prod_{r=1}^{p-1}\prod_{s=0}^{p^{l-1}-1}(r+ps)\equiv -1\pmod{p^l}
+\end{equation}
+\end{thrm}
+
+\begin{thrm}
+设素数$p\geq 3$，$l\geq 1$。$c=\varphi(2p^l)$，以及$r_1,\dotsc,r_c$是模$2p^l$的一组既约剩余系。我们有
+\begin{equation}
+r_1\dotsm r_c\equiv -1\pmod{2p^l}
+\end{equation}
+\end{thrm}
+
+Wilson定理在数论证明中比较有用。
+
+\begin{exmp}
+设$p$是奇素数，证明
+\begin{displaymath}
+1^2\cdot 3^2\dotsm (p-2)^2\equiv (-1)^{(p+1)/2}\pmod{p}
+\end{displaymath}
+\end{exmp}
+\begin{proof}
+注意到当$p$是奇素数时
+\begin{displaymath}
+\begin{split}
+(p-1)!&=(1\cdot(p-1))(3\cdot(p-3))\dotsm((p-2)(p-(p-2)))\\
+      &\equiv(-1)^{(p-1)/2}\cdot 1^2 \cdot 3^2\dotsm (p-2)^2\pmod{p}
+\end{split}
+\end{displaymath}
+由此可以得证。
+\end{proof}
+
+\chapter{同余方程}
+
+\section{同余方程基本概念}
+设整系数多项式
+\begin{displaymath}
+f(x)=a_n x^n+\dotsb+a_1 x+a_0
+\end{displaymath}
+
+我们可以讨论是否有整数$x$满足同余式
+\begin{equation}\label{EQU:congr_equ}
+f(x)\equiv 0\pmod{m}
+\end{equation}
+
+我们把这个同余式称作模$m$的\bbold{同余方程}\footnote{注意到同样存在多元的同余方程。}。若整数$c$满足这个同余方程，则称$c$是这个方程的解。显然，这是同余类$c\mod m$中的任一整数都是这个方程的解，我们把它们的全体看作一个解，记作
+\begin{displaymath}
+x\equiv c\pmod{m}
+\end{displaymath}
+
+由于我们显然只会在模$m$的一组完全剩余系中讨论解的情况，所以模$m$的同余方程的解至多只有$m$个。
+
+解同余方程需要对方程进行一些多项式变换，我们介绍几个最常用的形式：
+\begin{enumerate}[(i)]
+\item 设$s(x)$也是整系数多项式，则式\ref{EQU:congr_equ}的解与$f(x)+ms(x)\equiv 0\pmod{m}$的解相同。\footnote{这里要说明的是，同余方程的次数取决于方程的最高\bbold{有效}次数，因为有些高次项会被化简。}
+\item 设$s(x)$也是整系数多项式，则式\ref{EQU:congr_equ}的解与$f(x)+s(x)\equiv s(x)\pmod{m}$的解相同。
+\item 设$(a,m)=1$，则式\ref{EQU:congr_equ}的解与$af(x)\equiv 0\pmod{m}$的解相同。
+\item 设同余方程
+\begin{displaymath}
+h(x)\equiv 0\pmod{m}
+\end{displaymath}
+的解数为$m$，即是一个\bbold{恒等同余式}。若整系数多项式$q(x),r(x)$满足
+\begin{displaymath}
+f(x)=q(x)h(x)+r(x)
+\end{displaymath}
+则式\ref{EQU:congr_equ}的解与
+\begin{displaymath}
+r(x)\equiv 0\pmod{m}
+\end{displaymath}
+的解一样。
+\end{enumerate}
+
+由这些性质可以得到下面这个定理。
+
+\begin{thrm}
+若$(a_n,m)=1$及
+\begin{displaymath}
+a_n^{-1}a_n\equiv 1\pmod{m}
+\end{displaymath}
+则式\ref{EQU:congr_equ}的解与
+\begin{displaymath}
+x^n+a_n^{-1}a_{n-1}x^{n-1}+\dotsb+a_n^{-1}a_1 x+a_n^{-1}a_0\equiv -1\pmod{m}
+\end{displaymath}
+的解一样。
+\end{thrm}
+
+\begin{thrm}
+设正整数$d|m$。那么同余方程\ref{EQU:congr_equ}有解的必要条件是同余方程
+\begin{displaymath}
+f(x)\equiv 0\pmod{d}
+\end{displaymath}
+有解。
+\end{thrm}
+
+\section{一次同余方程}
+设$m\nmid a$，这一节讨论最简单的模$m$一次同余方程
+\begin{equation}\label{EQU:linear_congr}
+ax\equiv b\pmod{m}
+\end{equation}
+
+式\ref{EQU:linear_congr}有解的必要条件是
+\begin{equation}\label{EQU:linear_congr_iff}
+(a,m)|b
+\end{equation}
+
+\begin{thrm}
+当$(a,m)=1$时，同余方程\ref{EQU:linear_congr}必定有解，且其解数为$1$。
+\end{thrm}
+
+\begin{thrm}
+同余方程\ref{EQU:linear_congr}有解的充要条件是式\ref{EQU:linear_congr_iff}成立。在有解时，它有$(a,m)$个解。以及，若$x_0$是式\ref{EQU:linear_congr}的解，那么它的$(a,m)$个解是
+\begin{displaymath}
+x\equiv x_0+\frac{m}{(a,m)}t\pmod{m},\quad t=0,\dotsc,(a,m)-1
+\end{displaymath}
+\end{thrm}
+\begin{proof}
+要是$x$是式\ref{EQU:linear_congr}的解，那么一定存在一个整数$y$使得$ax=b+my$。我们要求解式\ref{EQU:linear_congr}，就是要求这个不定方程\footnote{关于不定方程，以后会做详细讨论。}。这里若$x_0,y_0$是不定方程的一个解，则
+\begin{displaymath}
+y_0=(ax_0-b)/m
+\end{displaymath}
+进而可以解得该不定方程的所有解是
+\begin{displaymath}
+x=x_0+\frac{m}{(a,m)}t,\quad y=y_0+\frac{a}{(a,m)}t,\quad t=0,\pm 1,\pm 2,\dotsc
+\end{displaymath}
+立刻推出该定理的结论。
+\end{proof}
+
+关于一次同余方程的解法，可以用扩展Euclid辗转相除法来做。
+
+\section{一次同余方程组，孙子定理}
+设$f_j(x)$是整系数多项式$(1\leq j\leq k)$。我们把含有变数$x$的一组同余式
+\begin{equation}\label{EQU:linear_cgeqs}
+f_j(x)\equiv 0\pmod{m_j},\quad 1\leq j\leq k
+\end{equation}
+称为是\bbold{同余方程组}。若整数$c$同时满足
+\begin{equation}
+f_j(c)\equiv 0\pmod{m_j},\quad 1\leq j\leq k
+\end{equation}
+则称$c$是同余方程组\ref{EQU:linear_cgeqs}的解，显见，这时同余类
+\begin{displaymath}
+c\mod m,\quad m=[m_1,\dotsc,m_k]
+\end{displaymath}
+中的任一整数也是同余方程组\ref{EQU:linear_cgeqs}的解。
+
+\begin{thrm}[孙子定理]
+设$m_1,\dotsc,m_k$是两两既约的正整数，那么，对任意整数$a_1,\dotsc,a_k$，一次同余方程组
+\begin{equation}\label{EQU:cgeq_sun}
+x\equiv a_j\pmod{m_j},\quad 1\leq j\leq k
+\end{equation}
+必有解，且解数为$1$.事实上，同余方程组\ref{EQU:cgeq_sun}的解是
+\begin{displaymath}
+x\equiv M_1 M_1^{-1}a_1+\dotsb+M_k M_k^{-1}a_k\pmod{m}
+\end{displaymath}
+的一个整数。这里$m=m_1\dotsm m_k$，$m=m_jM_j(1\leq j\leq k)$，以及$M_j^{-1}$是$M_j$的逆。
+\end{thrm}
+\begin{proof}
+这个定理的证明可以直接代入检验，容易得到它的正确性。
+\end{proof}
+
+该定理又称为\bbold{中国剩余定理}。孙子定理告诉我们，如果同余方程模数比较大，有时候需要采取分解素因数的办法分而解之。
+
+中国剩余定理也为我们表示大数字提供了一个方法。如果选定了一些两两互素的$m_i$，那么可以用这些数作为模，再以多元组的形式来表示数字。比如选定了$99,98,97,95$，那么所有小于$99\times 98\times 97\times 95=89403930$的非负整数都可以唯一的表示出来。例如，$123684=(33,8,9,89)$。整数原来的四则运算并没有变化。
+
+\section{模为素数的二次同余方程}
+本节讨论模为素数的二次同余方程的一般理论。由于$p=2$的情形比较显然，所以下面的讨论中我们均假定$p>2$且$p\nmid a$。二次同余方程的一般形式是
+\begin{equation}
+ax^2+bx+c\equiv 0\pmod{p}
+\end{equation}
+由于$p\nmid 4a$，所以上式的解和同余方程
+\begin{displaymath}
+4a(ax^2+bx+c)\equiv 0\pmod{p}
+\end{displaymath}
+的解相同，所以可以改写为
+\begin{displaymath}
+(2ax+b)^2\equiv b^2-4ac\pmod{p}
+\end{displaymath}
+我们令$y\equiv 2ax+b\pmod{p}$，得到
+\begin{displaymath}
+y^2\equiv b^2-4ac\pmod{p}
+\end{displaymath}
+因此，我们在以后的讨论中，只讨论
+\begin{equation}\label{EQU:sub_cgeq}
+x^2\equiv d\pmod{p}
+\end{equation}
+形式的方程。由于当$p|d$时仅有一个平凡解，所以我们不妨再假定$p\nmid d$。
+
+\begin{defn}
+设素数$p>2$，$d$是整数，$p\nmid d$。如果同余方程\ref{EQU:sub_cgeq}有解，则称$d$是模$p$的\bbold{二次剩余}；若无解，则称$d$是模$p$的\bbold{二次非剩余}。
+\end{defn}
+
+\begin{thrm}
+在模$p$的一个既约剩余系中，恰有$(p-1)/2$个模$p$的二次剩余，$(p-1)/2$个模$p$的二次非剩余。此外，若$d$是模$p$的二次剩余，则同余方程\ref{EQU:sub_cgeq}的解数为$2$。
+\end{thrm}
+
+\begin{thrm}[Euler判别法]
+设素数$p>2$，$p\nmid d$。那么，$d$是模$p$的二次剩余的充要条件是
+\begin{equation}\label{EQU:euler_judge}
+d^{(p-1)/2}\equiv 1\pmod{p}
+\end{equation}
+$d$是模$p$的二次非剩余的充要条件是
+\begin{equation}
+d^{(p-1)/2}\equiv -1\pmod{p}
+\end{equation}
+\end{thrm}
+\begin{proof}
+我们先证明上述两个式子有且仅有一个成立。我们有
+\begin{displaymath}
+d^{p-1}\equiv 1\pmod{p}
+\end{displaymath}
+所以
+\begin{displaymath}
+(d^{(p-1)/2}-1)(d^{(p-1)/2}+1)\equiv 0\pmod{p}
+\end{displaymath}
+由于素数$p>2$以及
+\begin{displaymath}
+(d^{(p-1)/2}-1,d^{(p-1)/2}+1)|2
+\end{displaymath}
+所以，上面两个判别式有且仅有一个成立。
+
+下面证式\ref{EQU:euler_judge}成立是$d$为$p$的二次剩余的充要条件。先证必要性。若$d$是$p$的二次剩余，则必有$x_0$使得
+\begin{displaymath}
+x_0^2\equiv d\pmod{p}
+\end{displaymath}
+因而
+\begin{displaymath}
+x_0^{p-1}\equiv d^{(p-1)/2}\pmod{p}
+\end{displaymath}
+由于$p\nmid d$，所以$p|x_0$，因而
+\begin{displaymath}
+x_0^{p-1}\equiv 1\pmod{p}
+\end{displaymath}
+必要性得证。
+
+再证充分性。证明方法和我们证明Wilson定理的方法一样。设式\ref{EQU:euler_judge}成立，此时必然有$p\nmid d$。考虑
+\begin{displaymath}
+ax\equiv d\pmod{p}
+\end{displaymath}
+对于$1\leq i<j\leq (p-1)/2$，我们有
+\begin{displaymath}
+i^2\not\equiv j^2\pmod{p}
+\end{displaymath}
+所以，$p$的既约剩余系中两两可以搭配成上式的解，所以
+\begin{displaymath}
+(p-1)!\equiv d^{(p-1)/2}\equiv -1\pmod{p}
+\end{displaymath}
+矛盾，充分性得证。
+\end{proof}
+
+\begin{coro}
+$-1$是模$p$的二次剩余的充要条件是$p\equiv 1\pmod{4}$；当$p\equiv 1\pmod{4}$时
+\begin{equation}
+\left(\pm\left(\frac{p-1}{2}\right)\right)^2\equiv -1\pmod{p}
+\end{equation}
+\end{coro}
+
+\begin{coro}\label{coro:euler_coro}
+设素数$p>2$，$p\nmid d_1$，$p\nmid d_2$。那么，
+\begin{enumerate}[(i)]
+\item 若$d_1,d_2$均为模$p$的二次剩余，那么$d_1d_2$也是模$p$的二次剩余；
+\item 若$d_1,d_2$均为模$p$的二次非剩余，那么$d_1d_2$是模$p$的二次剩余；
+\item 若$d_1$为模$p$的二次剩余，$d_2$为模$p$的二次非剩余，那么$d_1d_2$是模$p$的二次非剩余；
+\end{enumerate}
+\end{coro}
+
+以上的一个定理和两个推论介绍了如何从理论上判断一个数是否是二次剩余或者二次非剩余。推论\ref{coro:euler_coro}是一个Legendre符号的粗略雏形。
+
+\section{Legendre符号，Gauss二次互反律}
+我们在讨论模$p$的二次剩余、二次非剩余的时候，通常引进一个符号——\bbold{Legendre符号}。
+
+\begin{defn}
+设素数$p>2$。定义整变数$d$的函数
+\begin{displaymath}
+\left( \frac{d}{p} \right) =
+  \begin{cases}
+  1 & \text{当$d$是模$p$的二次剩余；}\\
+  -1 & \text{当$d$是模$p$的二次非剩余；}\\
+  0 & \text{当$p|d$，}
+  \end{cases}
+\end{displaymath}
+我们把$(\frac{d}{p})$称为是\bbold{模$p$的Legendre符号}。
+\end{defn}
+
+\begin{thrm}
+Legendre符号有以下性质：
+\begin{enumerate}[(i)]
+\item $\left(\frac{d}{p}\right)=\left(\frac{p+d}{p}\right)$；
+\item $\left(\frac{d}{p}\right)\equiv d^{(p-1)/2}\pmod{p}$；
+\item $\left(\frac{dc}{p}\right)=\left(\frac{d}{p}\right)\left(\frac{c}{p}\right)$；
+\item 当$p\nmid d$时，$\left(\frac{d^2}{p}\right)=1$；
+\item $\left(\frac{1}{p}\right)=1$，$\left(\frac{-1}{p}\right)=(-1)^{(p-1)/2}$。
+\end{enumerate}
+\end{thrm}
+
+这些性质的证明是十分简单的。
+
+这样，我们就把确定$d$的问题转化为了机械计算Legendre符号。由上面的性质可以知道，只要计算出
+\begin{displaymath}
+\left(\frac{-1}{p}\right),\quad \left(\frac{2}{p}\right),\quad \left(\frac{q}{p}\right)
+\end{displaymath}
+就可以计算出所有的$\left(\frac{d}{p}\right)$，这里$q>2$是小于$p$的素数。解决这个问题的基础是下面的Gauss引理。
+
+\begin{lemm}
+设素数$p>2$，$p\nmid d$，再设$1\leq j<p/2$，
+\begin{equation}
+t_j\equiv jd\pmod{p},\quad 0<t_j<p
+\end{equation}
+以$n$表示这$(p-1)/2$个$t_j(1\leq j<p/2)$中大于$p/2$的$t_j$的个数。那么有
+\begin{displaymath}
+\left(\frac{d}{p}\right)=(-1)^n
+\end{displaymath}
+\end{lemm}
+
+由该引理可以得到
+\begin{thrm}
+我们有
+\begin{displaymath}
+\left(\frac{2}{p}\right)=(-1)^{(p^2-1)/8}
+\end{displaymath}
+\end{thrm}
+
+\begin{thrm}
+设素数$p>2$。当$(d,2p)=1$时
+\begin{equation}
+\left(\frac{d}{p}\right)=(-1)^T
+\end{equation}
+其中
+\begin{equation}
+T=\sum_{j=1}^{(p-1)/2}\left[\frac{jd}{p}\right]
+\end{equation}
+\end{thrm}
+
+由这些定理可以得到著名的\bbold{Gauss二次互反定律}\footnote{这个定理是Gauss在19岁时证明的，Gauss在19岁时还得到了一个重要结果：《正十七边形尺规作图之理论与方法》。}。
+
+\begin{thrm}
+设$p,q$均为奇素数，$p\neq q$。那么有
+\begin{equation}
+\left(\frac{q}{p}\right)\cdot\left(\frac{p}{q}\right)=(-1)^{(p-1)/2\cdot(q-1)/2}
+\end{equation}
+\end{thrm}
+
+该定理表明：两个奇素数$p,q$，只要有一个数$\equiv 1\pmod{4}$，就必有
+\begin{displaymath}
+\left(\frac{q}{p}\right)=\left(\frac{p}{q}\right)
+\end{displaymath}
+
+当且仅当它们都是$4k+3$形式的数时，才有
+\begin{displaymath}
+\left(\frac{q}{p}\right)=-\left(\frac{p}{q}\right)
+\end{displaymath}
+
+Gauss二次互反定律是初等数论中最重要的基本定理之一。
+
+Legendre符号的计算需要求出$d$的素因数分解式后才能用Gauss二次互反定律，这当$d$较大时是不方便的。为了克服这个问题，产生了Jacobi符号。由于本文篇幅有限，有兴趣的读者可以自行查阅。
+
+\chapter{不定方程}
+我们把变数个数多余方程个数，且取整数值的方程（组）称为不定方程（组）。这在数论中是一个非常重要的课题。
+
+\section{一次不定方程}
+设整数$k\geq 2$，$c$，$a_1,\dotsc,a_k$是整数且不全为零，以及$x_1,\dotsc,x_k$是整数变数。方程
+\begin{equation}\label{EQU:dioeq}
+a_1x_1+\dotsb+a_kx_k=c
+\end{equation}
+称为$k$元\bbold{一次不定方程}，$a_1,\dotsc,a_k$是它的系数。
+
+\begin{thrm}
+不定方程\ref{EQU:dioeq}有解的充要条件是$(a_1,\dotsc,a_k)|c$。进而，不定方程\ref{EQU:dioeq}有解时，它的解和不定方程
+\begin{equation}
+\frac{a_1}{g}x_1+\dotsb+\frac{a_k}{g}a_k=\frac{c}{g}
+\end{equation}
+的解相同，这里$g=(a_1,\dotsc,a_k)$。
+\end{thrm}
+
+\begin{thrm}
+设二元一次不定方程
+\begin{equation}\label{EQU:two_dioeq}
+a_1x_1+a_2x_2=c
+\end{equation}
+有解，$x_{1,0},x_{2,0}$是它的一组解。那么，它的所有解为
+\begin{displaymath}
+\left\{
+\begin{array}{l}
+x_1 = x_{1,0}+\frac{a_2}{(a_1,a_2)}t\\
+x_2 = x_{2,0}+\frac{a_1}{(a_1,a_2)}t
+\end{array}
+\right.
+\quad t=0,\pm 1,\pm 2,\dotsc
+\end{displaymath}
+\end{thrm}
+
+\begin{thrm}
+设$g_1=a_1,g_2=(g_1,a_2),\dotsc,g_k=(g_{k-1},a_k)$。那么不定方程\ref{EQU:dioeq}等价于下面的有$2(k-1)$个整数变数$x_1,\dotsc,x_k,y_2,\dotsc,y_{k-1}$，$k-1$个方程的不定方程组：
+\begin{displaymath}
+\left\{
+\begin{array}{l}
+g_{k-1}y_{k-1}+a_kx_k=c\\
+g_{k-2}y_{k-2}+a_{k-1}x_{k-1}=g_{k-1}y_{k-1}\\
+\cdots\\
+g_2y_2+a_3x_3=g_3y_3\\
+g_1x_1+a_2x_2=g_2y_2
+\end{array}
+\right.
+\end{displaymath}
+当方程\ref{EQU:dioeq}有解时，它的通解由有$k-1$个参数的线性表达式给出。
+\end{thrm}
+
+\begin{thrm}
+设$a_1,a_2$及$c$均为正整数，$(a_1,a_2)=1$。那么，当$c>a_1a_2-a_1-a_2$时，不定方程\ref{EQU:two_dioeq}有非负解，解数等于$[c/(a_1a_2)]$或$[c/(a_1a_2)]+1$；当$c=a_1a_2-a_1-a_2$时，不定方程\ref{EQU:two_dioeq}没有非负解。
+\end{thrm}
+
+\begin{thrm}
+设$a_1,a_2$及$c$均为正整数，$(a_1,a_2)=1$。那么，当$c>a_1a_2$时，不定方程\ref{EQU:two_dioeq}有正解，解数等于$-[-c/(a_1a_2)]-1$或$-[-c/(a_1a_2)]$；当$c=a_1a_2$时，不定方程\ref{EQU:two_dioeq}没有正解。
+\end{thrm}
+
+\section{Pythagoras方程}
+这一节讨论二次不定方程
+\begin{equation}\label{EQU:pyth_eq}
+x^2+y^2=z^2
+\end{equation}
+它通常称为\bbold{商高方程}或\bbold{Pythogoras方程}。容易看出，所有的平凡解是
+\begin{displaymath}
+0,\pm a,\pm a;\quad \pm a,0,\pm a,\quad a\geq 0
+\end{displaymath}
+
+为了方便讨论，我们不妨假定
+\begin{displaymath}
+x>0,y>0,z>0,\quad (x,y,z)=1
+\end{displaymath}
+
+\begin{lemm}
+不定方程\ref{EQU:pyth_eq}的本原解$x,y,z$必满足条件：
+\begin{eqnarray}
+&(x,y)=(y,z)=(z,x)=1\\
+&2\nmid x+y
+\end{eqnarray}
+\end{lemm}
+
+\begin{thrm}
+不定方程\ref{EQU:dioeq}的$y$为偶数的全体本原解由以下公式给出
+\begin{equation}
+x=r^2-s^2,\quad y=2rs,\quad z=r^2+s^2
+\end{equation}
+其中$r,s$为满足以下条件的任意整数：
+\begin{displaymath}
+r>s>0,\quad (s,r)=1,\quad 2\nmid r+s
+\end{displaymath}
+\end{thrm}
+
+下面我们介绍一种非常重要的证明方法：\bbold{Fermat无限递降法}。
+
+\begin{thrm}
+不定方程
+\begin{equation}
+x^4+y^4=z^2
+\end{equation}
+无$xyz\neq 0$的解。
+\end{thrm}
+\begin{proof}
+该命题即要证无正整数解。假若有正整数解，那么在全体正整数解中，必有一组解$x_0,y_0,z_0$，使得$z_0$取最小值。
+\begin{enumerate}[(i)]
+\item 必有$(x_0,y_0)=1$。若不然，有素数$p|x_0,p|y_0$，则推出$p^2|z_0$，与$z_0$的最小性矛盾。由$x_0^2,y_0^2,z_0$为方程\ref{EQU:pyth_eq}的本原解得，$x_0,y_0$必为一奇一偶，不妨设$2|y_0$，以及$(z_0,y_0)=1$。
+\item $g_1=(z_0-y_0^2,z_0+y_0^2)=1$。因为$g_1|(2z_0,2y_0^2)=2(z_0,y_0^2)=2$，由此及$2\nmid z_0-y_0^2$即得$g_1=1$。由此及
+\begin{displaymath}
+(z_0-y_0^2)(z_0+y_0^2)=x_0^4
+\end{displaymath}
+我们令
+\begin{displaymath}
+z_0-y_0^2=u^4,\quad z_0+y_0^2=v^4
+\end{displaymath}
+这里$v>u>0,(u,v)=1,2\nmid uv$。进而有
+\begin{equation}
+y_0^2=(v^2-u^2)\frac{v^2+u^2}{2}
+\end{equation}
+\item $g_2=(v^2-u^2,(v^2+u^2)/2)=1$。因为
+\begin{displaymath}
+g_2|(v^2-u^2,v^2+u^2)|(2v^2,2u^2)=2(v^2,u^2)=2
+\end{displaymath}
+由$2\nmid uv$得到$2\nmid (v^2+u^2)/2$，因此$g_2=1$。我们再令
+\begin{displaymath}
+v^2-u^2=a^2,\quad (v^2+u^2)/2=b^2
+\end{displaymath}
+这里$a>0,b>0,(a,b)=1$，及$2|a,2\nmid b$。
+\item 由$u,v$满足的条件及$a,b$得
+\begin{displaymath}
+0<b<v<z_0
+\end{displaymath}
+及$u,a,v$是方程\ref{EQU:pyth_eq}的本原解且$2|a$。因此得到
+\begin{displaymath}
+u=r^2-s^2,\quad a=2rs,\quad v=r^2+s^2
+\end{displaymath}
+所以
+\begin{displaymath}
+r^4+s^4=b^2
+\end{displaymath}
+而$b<z_0$，与$z_0$的最小性矛盾，命题得证。
+\end{enumerate}
+\end{proof}
+
+无限递降法就是像这样，通过一个假设的存在解导出一个较小的解，再结合最小自然数原理来证明命题的一中方法。
+
+通过证明这个定理，我们容易得到
+
+\begin{coro}
+不定方程
+\begin{equation}
+x^4+y^4=z^4
+\end{equation}
+无$xyz\neq 0$的解。
+\end{coro}
+
+\begin{thrm}
+不定方程
+\begin{displaymath}
+x^2+y^2=z^4
+\end{displaymath}
+的满足条件$(x,y)=1$的全部正整数解是
+\begin{displaymath}
+x=\aabs{6a^2b^2-a^4-b^4},y=4ab(a^2-b^2),z=a^2+b^2
+\end{displaymath}
+及
+\begin{displaymath}
+x=4ab(a^2-b^2),y=\aabs{6a^2b^2-a^4-b^4},z=a^2+b^2
+\end{displaymath}
+其中$a,b$为满足以下条件的任意整数
+\begin{displaymath}
+a>b>0,\quad (a,b)=1,\quad 2\nmid a+b
+\end{displaymath}
+\end{thrm}
+
+\section{Lagrange定理}
+\begin{thrm}\label{THRM:lagrange}
+每个正整数一定可以表示为四个平方数之和，即对任意的$n\geq 1$，不定方程
+\begin{equation}\label{EQU:lagr_eq}
+x_1^2+x_2^2+x_3^2+x_4^2=n
+\end{equation}
+有解。
+\end{thrm}
+
+如果需要证明这个定理，下面的恒等式是必须引进的：
+\begin{eqnarray*}
+&&(a_1^2+a_2^2+a_3^2+a_4^2)(b_1^2+b_2^2+b_3^2+b_4^2)\\
+&&=(a_1b_1+a_2b_2+a_3b_3+a_4b_4)^2+(a_1b_2-a_2b_1+a_3b_4-a_4b_3)^2\\
+&&+(a_1b_3-a_3b_1+a_4b_2-a_2b_4)^2+(a_1b_4-a_4b_1+a_2b_3-a_3b_2)^2
+\end{eqnarray*}
+
+由此推出，若两个整数可以表示为四个平方数之和，那么它们的乘积也一定是四个平方数之和。所以定理\ref{THRM:lagrange}等价于
+
+\begin{thrm}
+每个素数$p$一定可以表示为四个平方数之和，即当$n=p$是不定方程\ref{EQU:lagr_eq}有解。
+\end{thrm}
+
+由于$2=1^2+1^2+0^2+0^2$，所以我们可以假定$p>2$。
+\begin{lemm}
+设素数$p>2$。同余方程
+\begin{displaymath}
+\left\{
+\begin{array}{l}
+x^2+y^2+1\equiv 0\pmod{p}\\
+0\leq x,y\leq (p-1)/2
+\end{array}
+\right.
+\end{displaymath}
+有解。
+\end{lemm}
+
+\begin{lemm}
+设素数$p>2$，一定存在整数$x_0,y_0$及$m_0$，$1\leq m_0<p$，使得
+\begin{displaymath}
+x_0^2+y_0^2+1=m_0p,\quad m_0\geq 1
+\end{displaymath}
+\end{lemm}
+
+\begin{thrm}
+当$n$是形如$4^\alpha(8k+7)(\alpha\geq 0,k\geq 0)$的正整数时，$n$不能表示为三个整数的平方和。
+\end{thrm}
+
+\begin{thrm}
+$n=2\cdot 4^\alpha(\alpha\geq 0)$不能表示为四个正平方数之和。
+\end{thrm}
+
+这个定理可以用归纳法证明。
+
+\begin{thrm}
+除去以下$12$个数：
+\begin{displaymath}
+1,2,3,4,6,7,9,10,12,15,18,33
+\end{displaymath}
+之外，每个正整数都可以表示为五个正平方数之和。
+\end{thrm}
+
+因为当$n>168$时，可以构造，所以只需要直接验证$n\leq 168$的情况。
+
+\appendix
+\chapter{初等数论主要内容}
+\begin{itemize}
+\item 素数
+  \begin{itemize}
+  \item 伪素数
+  \item 费马素数
+  \item 梅森素数
+  \item 孪生素数
+  \end{itemize}
+\item 因子
+  \begin{itemize}
+  \item 整除性的问题
+  \item 最大公因子
+  \item 辗转相除法
+  \item 质因子分解
+  \end{itemize}
+\item 有趣的数
+  \begin{itemize}
+  \item 完全数
+    \begin{itemize}
+    \item K类完全数
+    \end{itemize}
+  \item 自守数
+  \item 金兰数
+  \item 亲和数
+  \item 拟形数
+  \item 纯元数
+  \item 回文数
+  \item 卡普列加数
+  \end{itemize}
+\item 连分数
+  \begin{itemize}
+  \item 佩尔方程
+  \end{itemize}
+\item 幻方
+\item 原根
+\item 同余
+  \begin{itemize}
+  \item 二次剩余
+  \item 不定方程
+  \end{itemize}
+\item 倒数的性
+\item 数论函数
+  \begin{itemize}
+  \item 欧拉函数
+  \item 取整函数
+  \end{itemize}
+\item 经典的定理
+  \begin{itemize}
+  \item 欧拉定理
+  \item 费马小定理
+  \item 费马大定理
+  \item 中国剩余定理
+  \item 威尔逊定理
+  \item 素数定理
+  \item 二次互反律
+  \item 四平方和定理（Lagrange定理）
+  \item 算术基本定理
+  \item 整数数列
+    \begin{itemize}
+    \item 阶乘
+    \item Farey数列
+    \item Fibonacci数列
+    \end{itemize}
+  \item 看起来很简单的猜想
+    \begin{itemize}
+    \item 哥德巴赫猜想
+    \item 卡塔兰猜想
+    \item 角谷猜想
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\end{document}

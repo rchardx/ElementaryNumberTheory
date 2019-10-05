@@ -1,0 +1,638 @@
+%author:  Wentai ZHANG(rchardx@gmail.com)
+\def\version{20100122-rev4}
+
+\documentclass[dvipdfmx]{beamer}
+
+\usepackage[CJKtextspaces]{xeCJK}
+\input{xecjkfonts}
+
+\usepackage{amsmath,amssymb,amsthm,latexsym,mathrsfs}
+\usepackage{enumerate}
+
+\newcommand{\roma}[1]{\romannumeral #1}
+\newcommand{\Roma}[1]{\expandafter\@slowromancap\romannumeral #1@}
+
+\newcommand{\bbold}[1]{\textbf{#1}}
+
+\newcommand{\aabs}[1]{{ \left| #1 \right| }}
+\newcommand{\ffloor}[1]{{ \left\lfloor #1 \right\rfloor }}
+\newcommand{\N}{\boldsymbol{N}}
+\newcommand{\Z}{\boldsymbol{Z}}
+
+\newtheorem{thrm}{定理}[section]
+\newtheorem{prop}{性质}[section]
+\newtheorem{exmp}{例题}[section]
+\newtheorem{defn}{定义}[section]
+\newtheorem{lemm}[thrm]{引理}
+\newtheorem{coro}[thrm]{推论}
+
+\renewenvironment{proof}[1][证]{\noindent \textbf{#1.} }{\hfill$\Box$}
+
+\usefonttheme{serif}
+
+\usetheme{Berkeley}
+\usecolortheme{seahorse}
+
+\begin{document}
+\title{初等数论}
+\author{张文泰}
+%\institute{}
+\date{\version}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%\begin{frame}{主要内容}
+%\tableofcontents[currentsection,currentsubsection,subsectionstyle=show/show/hide]
+%\end{frame}
+
+\section{引子}
+
+\begin{frame}{引子}
+\begin{itemize}
+\item 数论在信息学中作为一个单独的题目并不是很常见，但是在解题的过程中经常可以用到相关的数论性质。在解决特定问题的时候，数论也是具有相当优势的方法。
+\item 本文主要介绍了一些初等数论的性质，而不是直接给出相关的代码。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{引子}
+下面主要讲的内容有
+\begin{itemize}
+\item 整除
+\item 同余
+\item 同余方程
+\item 不定方程
+\end{itemize}
+其中整除是一些基础的内容，同余和同余方程则稍微深入一些，不定方程则大部分是在做数学推导。
+\end{frame}
+
+\begin{frame}{引子}
+由于篇幅和个人能力的限制，还有很多内容没有介绍到。像下面的：
+\begin{itemize}
+\item 高次同余方程
+\item 数论函数
+\item Dirichlet特征
+\item 连分数
+\item 复杂不定方程
+\end{itemize}
+有兴趣的同学可以自行学习。
+\end{frame}
+
+\begin{frame}{引子}
+\begin{itemize}
+\item 对于数论的学习，我的建议是主要在做题中积累经验，多注意一些习题中的思想方法，多看一些书。
+\item 比较好的书有： 《Concrete Mathematics》 、《初等数论》、《简明数论》。
+\end{itemize}
+\end{frame}
+
+\section{整除}
+
+\begin{frame}{整除}
+\begin{itemize}
+\item 整除理论是数论的基础，它主要是对整数除法运算的内容作抽象的、系统的总结。
+\item 整除的主要内容是算术基本定理，同时有对其他基础理论的讨论。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Peano公理}
+设$\N$是一个非空集合，满足以下条件：
+\pause
+\begin{enumerate}[(i)]
+\item 对每一个元素$n\in \N$，一定有唯一的一个$\N$中的元素与之对应，这个元素记作$n^+$，称为$n$的后继元素。
+\item 有元素$e\in \N$，它不是任一元素的后继。
+\item $\N$中的元素至多是一个元素的后继。
+\item 设$S$是$\N$的一个子集合，$e\in S$。如果$n\in S$，则必有$n^+\in S$，那么，$S=\N$。
+\end{enumerate}
+\pause
+这样的集合就是自然数的抽象定义。
+\end{frame}
+
+\begin{frame}{归纳证明原理}
+\begin{itemize}
+\item 设$P(n)$是关于自然数$n$的一种性质或者命题。如果当$n=e$时，$P(e)$成立，以及有$P(n)$成立必可推出$P(n^+)$成立，那么，$P(n)$对所有的$n\in \N$都成立。
+\pause
+\item 归纳证明原理作为一种相当基础的证明算法，在解决一些关于集合的命题的时候往往会被使用。在验证某些恒等式的时候，由于等式的变量取值为正整数，有时候也可以巧妙地使用归纳证明原理来证明。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{自然数性质}
+\begin{itemize}
+\item 最小自然数原理：自然数集合$\N$的任一子集$T$中都存在一个最小的元素。
+\item 最大自然数原理：对于自然数集合$\N$的一个子集$M$，如果$M$存在上界，那么$M$中必定存在一个最大的元素。
+\end{itemize}
+这两个性质在证明存在性的时候比较有用。
+\end{frame}
+
+\begin{frame}{整除}
+设$a,b\in \Z$，$a\neq 0$。如果存在$q\in \Z$使得$b=aq$，那么就说$b$可被$a$整除，记作$a|b$，且称$b$是$a$的倍数，$a$是$b$的约数。$b$不能被$a$整除就记作$a\nmid b$。
+\end{frame}
+
+\begin{frame}{素数}
+\begin{itemize}
+\item 设整数$p\neq 0,\pm 1$。如果它除了显然约数$\pm 1,\pm p$外没有其他的约数，那么$p$被称为是不可约数，也叫做素数。若$a\neq 0,\pm 1$且$a$不是不可约数，则$a$称为合数。
+\item 我们一般假定素数都是正整数。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{素数}
+若整数$a\geq 2$，则$a$必有可以表示为若干个素数的乘积，即
+\begin{displaymath}
+a = p_1p_2p_3\dotsm p_s
+\end{displaymath}
+值得注意的是，这个分解式是唯一的。
+\end{frame}
+
+\begin{frame}{素因数分解}
+设整数$a\geq 2$。
+\begin{itemize}
+\item 若$a$是合数，则必有素数$p$，$p\leq a^{1/2}$；
+\item 若$a$有如上的分解式，则必有不可约数$p$，$p\leq a^{1/s}$。
+\end{itemize}
+这个结论给予了我们一种在一定范围内求素数的方法——Eratosthenes筛法。
+\end{frame}
+
+\begin{frame}{素数}
+\begin{itemize}
+\item 一个著名的结论是：素数有无限多个。
+\item 证明相当简单。假设只有$p_1,\dotsc,p_n$这$n$个素数，那么$E_n=p_1\dotsm p_n+1$就是一个新的素数，所以结论是正确的。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{素性检验}
+\begin{itemize}
+\item 我们经常遇到的一个问题是“判断一个数是否是素数”。
+\item 对于这个问题，我们一般有试除法、Fermat素性检验和Miller-Rabin素性检验等几种方法。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{带余除法}
+\begin{itemize}
+\item 带余除法作为数论中最常使用的基本方法，具有很高的实用性。它是数论证明中最重要、最基本、最直接的工具。
+\item IMO中的大部分数论题目都可以用带余除法解决，虽然过程可能不太直观，但是并不能影响它的地位。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{带余除法}
+\begin{itemize}
+\item 设$a,b$是两个给定的整数，$a\neq 0$。那么一定存在唯一的一对整数$q$与$r$，满足
+\begin{displaymath}
+b = qa + r, 0\leq r<\aabs{a}
+\end{displaymath}
+\item 此外，$a|b$的充要条件是$r=0$。
+\item 我们在具体应用的时候，往往并不要求$r$满足最小性，而是根据情况选择$q$之后再研究$r$的性质。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{整数分类}
+\begin{itemize}
+\item 我们接下来得到一个看似简单，但是很有用的结论。
+\item 设$a>0$。任一整数被$a$除后所得的最小非负余数是且仅是$0,1,\dotsc,a-1$这$a$个数中的一个。
+\item 这个整数分类的方法往往配合鸽巢原理使用。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{辗转相除法}
+设$u_0,u_1$是给定的两个整数，$u_1\neq 0,u_1\nmid u_0$。我们一定可以重复应用带余除法得到下面$k+1$个等式：
+\begin{equation*}
+\begin{array}{ll}
+u_0 = q_0  u_1 +u_2 ,    &  0 < u_2 < \aabs{u_1} ,\\
+u_1 = q_1  u_2 +u_3 ,    &  0 < u_3 < u_2 ,       \\
+u_2 = q_2  u_3 +u_4 ,    &  0 < u_4 < u_3 ,       \\
+\cdots,                   &  \cdots        ,      \\
+u_{k-2} = q_{k-2} u_{k-1} +u_k ,    &  0 < u_k < u_{k-1} ,   \\
+u_{k-1} = q_{k-1}  u_k +u_{k+1} ,    &  0 < u_{k+1} < u_k ,   \\
+u_k = q_k  u_{k+1} .    & 
+\end{array}
+\end{equation*}
+\end{frame}
+
+\begin{frame}{最大公约数}
+\begin{itemize}
+\item 设$a_1, a_2$是两个整数。如果$d|a_1$且$d|a_2$，那么，$d$就是$a_1, a_2$的公约数。
+\item 设$a_1, a_2$是两个不全为$0$的整数，我们把$a_1, a_2$的公约数中最大的那个称为$a_1, a_2$的最大公约数，记作$(a_1, a_2)$。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{互素}
+\begin{itemize}
+\item 一组数的最大公约数等于1是这组数的一个重要性质，为此我们引入一个概念。
+\item 若$(a_1,a_2)=1$，则称$a_1$和$a_2$是既约的，或是互素的。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{最小公倍数}
+\begin{itemize}
+\item 设$a_1,a_2$是两个均不等于零的整数。如果$a_1|l$且$a_2|l$，则称$l$是$a_1$和$a_2$的公倍数。一般情况容易推出。
+\item 设整数$a_1,a_2$均不为零。我们把$a_1$和$a_2$的正的公倍数中的最小的称为$a_1$和$a_2$的最小公倍数，记作$[a_1, a_2]$。
+\item $[a_1,a_2](a_1, a_2)=a_1a_2$。这个等式告诉我们两者之间的关系。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{最大公约数理论}
+我们可以用多种方法来构建最大公约数理论，一般而言有下面几种：
+\begin{itemize}
+\item 带余除法
+\item 整系数线性组合
+\item 辗转相除法
+\end{itemize}
+\end{frame}
+
+\begin{frame}{最大公约数理论}
+\begin{itemize}
+\item 用带余除法构建最大公约数理论关键在于用带余除法证明最小公倍数的性质。
+\item 我们在建立理论的过程中发现“最大”与“最小”其实都是相对于整除的概念。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{最大公约数理论}
+\begin{itemize}
+\item 用整系数线性组合来刻画最大公约数是一种非常常用的手段。
+\item 设$a_1,\dotsc,a_k$是不全为零的整数。我们有
+\begin{displaymath}
+(a_1,\dotsc,a_k)=\min\{s=a_1x_1+\dotsb+a_k x_k : s>0\}
+\end{displaymath}
+\item 这里满足$x_j\in \Z(1\leq j\leq k)$。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{最大公约数理论}
+辗转相除法的刻画过程不再赘述，其主要思想是利用辗转相除所产生的等式。
+\begin{displaymath}
+u_{k+1}=(u_0,u_1)
+\end{displaymath}
+\end{frame}
+
+\begin{frame}{算术基本定理}
+\begin{itemize}
+\item 设$a>1$，那么，必有
+\begin{displaymath}
+a=p_1^{\alpha_1} \dotsm p_s^{\alpha_s},\quad p_1<p_2<\dotsb<p_s
+\end{displaymath}
+\item 而且，这个分解式是唯一的。我们把该式称为$a$的标准素因数分解式。
+\item 我们可以根据素数分解式的形式找到一个计算最大公约数和最小公倍数的方法。
+\end{itemize}
+\end{frame}
+
+\section{同余}
+
+\begin{frame}{同余}
+\begin{itemize}
+\item 下面将讨论有关同余理论的基本概念和性质。
+\item 同余的概念主要是：同余，同余式，同余类，完全剩余系，既约剩余系。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{同余}
+\begin{itemize}
+\item 设$m\neq 0$。若$m|a−b$，即$a−b=km$，则称$m$为模，$a$同余于$b$模$m$，以及$b$是$a$对模$m$的剩余。记作
+\begin{displaymath}
+a\equiv b\pmod{m}
+\end{displaymath}
+\item 不然，则称$a$不同余于$b$模$m$，$b$不是$a$对模$m$的剩余。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{同余}
+同余是一种等价关系，即有
+\begin{eqnarray*}
+&a\equiv a\pmod{m}\\
+&a\equiv b\pmod{m} \iff b\equiv a\pmod{m} \\
+&a\equiv b\pmod{m}, b \equiv c\pmod{m} \Rightarrow a\equiv c\pmod{m}
+\end{eqnarray*}
+\end{frame}
+
+\begin{frame}{同余}
+\begin{itemize}
+\item 同余式可以相加，也可以相乘。
+\begin{displaymath}
+ca\equiv cb\pmod{m} \Rightarrow a\equiv b\pmod{m/(c,m)}
+\end{displaymath}
+\item 另外的一些同余的运算性质都可以用带余除法推导出来。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{同余类与剩余系}
+\begin{itemize}
+\item 对给定的模$m$，整数的同余关系是一个等价关系，因此全体整数对模$m$是否同余分为若干个两两不相交的集合，使得在同一个集合中的任意两个数对模$m$一定同余，而属于不同集合中的两个数对模$m$一定不同余。
+\pause
+\item 每一个这样的集合称为是模$m$的同余类。我们以$r \mod m$表示$r$所属的模$m$的同余类。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{同余类与剩余系}
+\begin{itemize}
+\item 模$m$的同余类$r \mod m$称为是模$m$的既约剩余类，如果$(r,m)=1$。
+\item 模$m$的所有既约剩余类的个数记作$\varphi(m)$，通常称为Euler函数。
+\item Euler函数$\varphi(m)$在数论中是十分重要的，有很多有关它的有趣性质。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Euler函数}
+\begin{itemize}
+\item 设$m>1$，且$m=p_1^{\alpha_1} \dotsm p_s^{\alpha_s},\quad p_1<p_2<\dotsb<p_s$，
+\item 则$\varphi(m)=m\prod_{p|m}\left(1-\frac{1}{p}\right)$。
+\item Euler 函数是一个积性函数。也就是说，如果$(m_1,m_2)=1$，那么$\varphi(m_1m_2)=\varphi(m_1)\varphi(m_2)$。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Fermat-Euler定理}
+\begin{itemize}
+\item 设$(a,m) = 1$，则有
+\begin{displaymath}
+a^{\varphi(m)}\equiv 1\pmod{m}
+\end{displaymath}
+\pause
+\item 特别的，当$p$为素数时,有
+\begin{displaymath}
+a^p\equiv a\pmod{p}
+\end{displaymath}
+\item 这个定理在解决一些构造性问题时非常有用。RSA系统的思想也是来自于这个定理。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Wilson 定理}
+\begin{itemize}
+\item 设$p$是素数，$r_1,\dotsc,r_{p−1}$是模$p$的既约剩余系，我们有
+\begin{displaymath}
+r_1\dotsm r_{p−1}\equiv −1\pmod{p}
+\end{displaymath}
+\pause
+\item 特别的
+\begin{displaymath}
+(p − 1)!\equiv −1\pmod{p}
+\end{displaymath}
+\item 需要说明的是,这个定理并不能用来高效地检验一个数是否是素数。
+\end{itemize}
+\end{frame}
+
+\section{同余方程}
+
+\begin{frame}{同余方程}
+\begin{itemize}
+\item 设整系数多项式
+\begin{displaymath}
+f(x)=a_n x^n+\dotsb+a_1 x+a_0
+\end{displaymath}
+\item 我们可以讨论是否有整数$x$满足同余式
+\begin{displaymath}
+f(x)\equiv 0\pmod{m}
+\end{displaymath}
+\item 我们把这个同余式称作模$m$的同余方程。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{同余方程}
+\begin{itemize}
+\item 解同余方程需要对方程进行一些多项式变换。
+\item 多项式变换主要有四种。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{一次同余方程}
+\begin{itemize}
+\item 设$m\nmid a$，模$m$一次同余方程即为
+\begin{displaymath}
+ax\equiv b\pmod{m}
+\end{displaymath}
+\pause
+\item 上式有解的必要条件是
+\begin{displaymath}
+(a,m)|b
+\end{displaymath}
+\item 当$(a,m)=1$时，同余方程必定有解，且其解数为$1$。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{一次同余方程}
+\begin{itemize}
+\item 关于一次同余方程的解法，可以用扩展Euclid 辗转相除法来做。
+\item 同余方程有解的充要条件是$(a,m)|b$成立。在有解时，它有$(a,m)$个解。
+\item 以及，若$x_0$是一个解，那么它的所有$(a,m)$个解是
+\begin{displaymath}
+x\equiv x_0+\frac{m}{(a,m)}t\pmod{m},\quad t=0,\dotsc,(a,m)-1
+\end{displaymath}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{一次同余方程组}
+设$f_j(x)$是整系数多项式$(1\leq j\leq k)$。我们把含有变数$x$的一组同余式
+\begin{displaymath}
+f_j(x)\equiv 0\pmod{m_j}, 1\leq j\leq k
+\end{displaymath}
+称为是同余方程组。
+\end{frame}
+
+\begin{frame}{孙子定理}
+设$m_1,\dotsc,m_k$是两两既约的正整数，那么，对任意整数$a_1,\dotsc,a_k$，一次同余方程组
+\begin{displaymath}
+x\equiv a_j \pmod{m_j}, 1\leq j\leq k
+\end{displaymath}
+必有解，且解数为$1$。
+\end{frame}
+
+\begin{frame}{孙子定理}
+\begin{itemize}
+\item 事实上，同余方程组的解是
+\begin{displaymath}
+x\equiv M_1 M_1^{-1}a_1+\dotsb+M_k M_k^{-1}a_k\pmod{m}
+\end{displaymath}
+的一个整数。这里$m=m_1\dotsm m_k$，$m=m_jM_j(1\leq j\leq k)$，以及$M_j^{-1}$是$M_j$的逆。
+\item 该定理又称为中国剩余定理。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{模为素数的二次同余方程}
+\begin{itemize}
+\item 下面讨论模为素数的二次同余方程的一般理论。
+\item 由于$p = 2$的情形比较显然，所以下面的讨论中我们均假定$p > 2$且$p\nmid a$。二次同余方程的一般形式是
+\begin{displaymath}
+ax^2 + bx + c\equiv 0 \pmod{p}
+\end{displaymath}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{模为素数的二次同余方程}
+\begin{itemize}
+\item 由于$p\nmid 4a$，所以上式的解和同余方程
+\begin{displaymath}
+4a(ax^2+bx+c)\equiv 0\pmod{p}
+\end{displaymath}
+的解相同，所以可以改写为
+\begin{displaymath}
+(2ax+b)^2\equiv b^2-4ac\pmod{p}
+\end{displaymath}
+\pause
+\item 我们令$y\equiv 2ax+b\pmod{p}$，得到
+\begin{displaymath}
+y^2\equiv b^2-4ac\pmod{p}
+\end{displaymath}
+\item 因此，我们在以后的讨论中，只讨论
+\begin{displaymath}
+x^2\equiv d\pmod{p}
+\end{displaymath}
+形式的方程。由于当$p|d$时仅有一个平凡解，所以我们不妨再假定$p\nmid d$。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{模为素数的二次同余方程}
+\begin{itemize}
+\item 设素数$p>2$，$d$是整数，$p\nmid d$。如果同余方程有解，则称$d$是模$p$的二次剩余；若无解，则称$d$是模$p$的二次非剩余。
+\item 在模$p$的一个既约剩余系中，恰有$(p-1)/2$个模$p$的二次剩余，$(p-1)/2$个模$p$的二次非剩余。此外，若$d$是模$p$的二次剩余，则同余方程的解数为$2$。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Euler判别法}
+\begin{itemize}
+\item 设素数$p>2$，$p\nmid d$。那么，$d$是模$p$的二次剩余的充要条件是
+\begin{displaymath}
+d^{(p-1)/2}\equiv 1\pmod{p}
+\end{displaymath}
+\pause
+\item $d$是模$p$的二次非剩余的充要条件是
+\begin{displaymath}
+d^{(p-1)/2}\equiv -1\pmod{p}
+\end{displaymath}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Legendre符号}
+\begin{itemize}
+\item 我们在讨论模$p$的二次剩余、二次非剩余的时候，通常引进一个符号——Legendre符号。
+\pause
+\item 设素数$p>2$。定义整变数$d$的函数
+\begin{displaymath}
+\left( \frac{d}{p} \right) =
+  \begin{cases}
+  1 & \text{当$d$是模$p$的二次剩余；}\\
+  -1 & \text{当$d$是模$p$的二次非剩余；}\\
+  0 & \text{当$p|d$，}
+  \end{cases}
+\end{displaymath}
+我们把$(\frac{d}{p})$称为是\bbold{模$p$的Legendre符号}。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Legendre符号}
+\begin{itemize}
+\item 我们经过一些性质的引进，把确定d的问题转化为了机械计算Legendre符号。
+\item 由一些性质可以知道，只要计算出
+\begin{displaymath}
+\left(\frac{-1}{p}\right),\quad \left(\frac{2}{p}\right),\quad \left(\frac{q}{p}\right)
+\end{displaymath}
+就可以计算出所有的$\left(\frac{d}{p}\right)$。这里$q>2$是小于$p$的素数。
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Gauss 二次互反定律}
+\begin{itemize}
+\item 设$p,q$均为奇素数，$p\neq q$。那么有
+\begin{displaymath}
+\left(\frac{q}{p}\right)\cdot\left(\frac{p}{q}\right)=(-1)^{(p-1)/2\cdot(q-1)/2}
+\end{displaymath}
+\item Gauss 二次互反定律是初等数论中最重要的基本定理之一。
+\end{itemize}
+\end{frame}
+
+\section{不定方程}
+
+\begin{frame}{不定方程}
+我们把变数个数多余方程个数，且取整数值的方程（组）称为不定方程（组）。这在数论中是一个非常重要的课题。
+\end{frame}
+
+\begin{frame}{一次不定方程}
+设整数$k\geq 2$，$c$，$a_1,\dotsc,a_k$是整数且不全为零，以及$x_1,\dotsc,x_k$是整数变数。方程
+\begin{displaymath}
+a_1x_1+\dotsb+a_kx_k=c
+\end{displaymath}
+称为$k$元一次不定方程，$a_1,\dotsc,a_k$是它的系数。
+\end{frame}
+
+\begin{frame}{一次不定方程}
+不定方程有解的充要条件是$(a_1,\dotsc,a_k)|c$。进而，不定方程有解时，它的解和不定方程
+\begin{displaymath}
+\frac{a_1}{g}x_1+\dotsb+\frac{a_k}{g}a_k=\frac{c}{g}
+\end{displaymath}
+的解相同，这里$g=(a_1,\dotsc,a_k)$。
+\end{frame}
+
+\begin{frame}{一次不定方程}
+设二元一次不定方程
+\begin{displaymath}
+a_1x_1+a_2x_2=c
+\end{displaymath}
+有解，$x_{1,0},x_{2,0}$是它的一组解。那么，它的所有解为
+\begin{displaymath}
+\left\{
+\begin{array}{l}
+x_1 = x_{1,0}+\frac{a_2}{(a_1,a_2)}t\\
+x_2 = x_{2,0}+\frac{a_1}{(a_1,a_2)}t
+\end{array}
+\right.
+\quad t=0,\pm 1,\pm 2,\dotsc
+\end{displaymath}
+\end{frame}
+
+\begin{frame}{Pythagoras方程}
+\begin{itemize}
+\item 下面讨论二次不定方程
+\begin{displaymath}
+x^2+y^2=z^2
+\end{displaymath}
+\item 它通常称为商高方程或Pythogoras方程。容易看出，所有的平凡解是
+\begin{displaymath}
+0,\pm a,\pm a;\quad \pm a,0,\pm a,\quad a\geq 0
+\end{displaymath}
+\pause
+\item 为了方便讨论，我们不妨假定
+\begin{displaymath}
+x>0,y>0,z>0,\quad (x,y,z)=1
+\end{displaymath}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pythagoras方程}
+\begin{itemize}
+\item 不定方程的本原解$x,y,z$必满足条件：
+\begin{eqnarray*}
+&(x,y)=(y,z)=(z,x)=1\\
+&2\nmid x+y
+\end{eqnarray*}
+\pause
+\item 不定方程的$y$为偶数的全体本原解由以下公式给出
+\begin{displaymath}
+x=r^2-s^2,\quad y=2rs,\quad z=r^2+s^2
+\end{displaymath}
+\item 其中$r,s$为满足以下条件的任意整数：
+\begin{displaymath}
+r>s>0,\quad (s,r)=1,\quad 2\nmid r+s
+\end{displaymath}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Lagrange定理}
+每个正整数一定可以表示为四个平方数之和，即对任意的$n\geq 1$，不定方程
+\begin{displaymath}
+x_1^2+x_2^2+x_3^2+x_4^2=n
+\end{displaymath}
+有解。
+\end{frame}
+
+\begin{frame}{Lagrange定理}
+如果需要证明这个定理，下面的恒等式是必须引进的：
+\begin{eqnarray*}
+&&(a_1^2+a_2^2+a_3^2+a_4^2)(b_1^2+b_2^2+b_3^2+b_4^2)\\
+&&=(a_1b_1+a_2b_2+a_3b_3+a_4b_4)^2\\
+&&+(a_1b_2-a_2b_1+a_3b_4-a_4b_3)^2\\
+&&+(a_1b_3-a_3b_1+a_4b_2-a_2b_4)^2\\
+&&+(a_1b_4-a_4b_1+a_2b_3-a_3b_2)^2
+\end{eqnarray*}
+\end{frame}
+
+\section{End}
+
+\begin{frame}{End}
+谢谢。
+\end{frame}
+
+\end{document}
